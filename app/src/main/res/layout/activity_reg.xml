@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.konrad.geoxplore.RegActivity"
+    android:background="@drawable/map_background">
+
+    <EditText
+        android:id="@+id/et_login"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:hint="Login"
+        android:ems="10"
+        android:background="#11000000"
+        android:drawableLeft="@drawable/ic_action_login"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/et_password"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="26dp"
+        android:ems="10"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:background="#11000000"
+        android:drawableLeft="@drawable/ic_action_password"
+        android:layout_below="@+id/et_login"
+        android:layout_alignLeft="@+id/et_login"
+        android:layout_alignStart="@+id/et_login" />
+
+    <EditText
+        android:id="@+id/et_passwordRepeat"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_alignEnd="@+id/et_email"
+        android:layout_alignRight="@+id/et_email"
+        android:layout_below="@+id/et_password"
+        android:layout_marginTop="25dp"
+        android:ems="10"
+        android:background="#11000000"
+        android:drawableLeft="@drawable/ic_action_password"
+        android:hint="Repeat Password"
+        android:inputType="textPassword" />
+
+    <EditText
+        android:id="@+id/et_email"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="24dp"
+        android:ems="10"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:background="#11000000"
+        android:drawableLeft="@drawable/ic_action_email"
+        android:layout_below="@+id/et_passwordRepeat"
+        android:layout_alignLeft="@+id/cv_register"
+        android:layout_alignStart="@+id/cv_register" />
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cv_register"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/et_email"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="64dp"
+        app:cardBackgroundColor="@android:color/holo_purple"
+        app:cardCornerRadius="25dp"
+        app:cardElevation="15dp"
+        app:contentPadding="10dp" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Registry"
+                android:textColor="@color/cardview_dark_background"
+                android:textSize="16dp"
+                android:layout_centerInParent="true"/>
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+
+
+</RelativeLayout>

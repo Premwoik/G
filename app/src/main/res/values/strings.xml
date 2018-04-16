@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">GeoXplore</string>
+    <string name="ms_invalid_email">Incorrect e-mail adress.</string>
+    <string name="ms_invalid_login">Your login must contains between 4 and 16 characters.</string>
+    <string name="ms_different_passwords">Your repeated password must be the same as password.</string>
+</resources>
