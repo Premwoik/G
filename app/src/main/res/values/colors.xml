@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#62D5A4</color>
+    <color name="colorPrimaryDark">#6F9A8E</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="separator_color" >#80878E</color>
+    <color name="exp_bar_background">#637c86</color>
+    <color name="exp_bar_progress">#D7D8D7</color>
+    <color name="user_profile_background">#627683</color>
+    <color name="fonts_white">#FFFFFF</color>
+    <color name="pts_color">#614A78</color>
 
     <color name="black_overlay">#66000000</color>
 </resources>

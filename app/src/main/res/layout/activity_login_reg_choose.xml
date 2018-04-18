@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/map_background"
-    tools:context="com.example.konrad.geoxplore.LoginRegChooseActivity">
+    tools:context="com.example.geoxplore.login.LoginRegChooseActivity">
 
     <android.support.v7.widget.CardView
         android:id="@+id/cv_loginButton"

@@ -1,0 +1,225 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/smooth_background"
+    android:fitsSystemWindows="true"
+    tools:context=".UserProfileFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="30dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="15dp"
+        android:orientation="vertical">
+
+        <!--<ImageView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:scaleType="centerInside"-->
+        <!---->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/user_profile_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textColor="@color/fonts_white"
+                android:textSize="20sp" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/user_profile_image"
+                android:layout_width="180dp"
+                android:layout_height="180dp"
+                android:layout_below="@+id/user_profile_name"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:layout_marginTop="17dp"
+                android:src="@drawable/avatar"
+                app:civ_border_color="@color/exp_bar_progress"
+                app:civ_border_width="3dp" />
+
+            <TextView
+                android:id="@+id/user_profile_pts"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="41dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/pts_shape_circle"
+                android:paddingTop="10dp"
+                android:textAlignment="center"
+                android:textColor="@color/fonts_white" />
+        </RelativeLayout>
+
+        <android.support.v7.widget.GridLayout xmlns:grid="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/choice_grid"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:padding="4dp"
+            grid:columnCount="5"
+            grid:rowCount="2">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/user_profile_friends"
+                android:textColor="@color/fonts_white"
+                android:textSize="16sp"
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="center" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/separator_color"
+                grid:layout_rowSpan="2"
+                grid:layout_rowWeight="2" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/user_profile_boxes"
+                android:textColor="@color/fonts_white"
+                android:textSize="16sp"
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="center" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/separator_color"
+                grid:layout_rowSpan="2"
+                grid:layout_rowWeight="2" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/user_profile_budges"
+                android:textColor="@color/fonts_white"
+                android:textSize="16sp"
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="center" />
+
+            <TextView
+                android:id="@+id/user_profile_friends"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/fonts_white"
+                android:textSize="18sp"
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="center" />
+
+            <TextView
+                android:id="@+id/user_profile_boxes"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/fonts_white"
+                android:textSize="18sp"
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="center" />
+
+            <TextView
+                android:id="@+id/user_profile_badges"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/fonts_white"
+                android:textSize="18sp"
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="center" />
+
+        </android.support.v7.widget.GridLayout>
+
+        <ProgressBar
+            android:id="@+id/user_profile_exp_progress_bar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:progressDrawable="@drawable/exp_progressbar" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/user_profile_current_lvl"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="start"
+                android:textColor="@color/fonts_white" />
+
+            <TextView
+                android:id="@+id/user_profile_percent_to_next_lvl"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:textColor="@color/fonts_white" />
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/separator_color" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/gained"
+            android:textColor="@color/fonts_white" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp">
+
+            <ProgressBar
+                android:id="@+id/user_profile_progress_bar1"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="@dimen/default_gap"
+                android:background="@drawable/circle_shape"
+                android:indeterminate="false"
+                android:progressDrawable="@drawable/circular" />
+
+            <ProgressBar
+                android:id="@+id/user_profile_progress_bar2"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="@dimen/default_gap"
+                android:background="@drawable/circle_shape"
+                android:indeterminate="false"
+                android:progressDrawable="@drawable/circular" />
+
+            <ProgressBar
+                android:id="@+id/user_profile_progress_bar3"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="@dimen/default_gap"
+                android:background="@drawable/circle_shape"
+                android:indeterminate="false"
+                android:progressDrawable="@drawable/circular" />
+        </LinearLayout>
+
+
+        <!--</LinearLayout>-->
+    </LinearLayout>
+
+</ScrollView>
