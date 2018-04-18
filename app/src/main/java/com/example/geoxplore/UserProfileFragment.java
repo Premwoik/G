@@ -27,7 +27,7 @@ import butterknife.Unbinder;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-
+//TODO no zrobic, zeby jakos ladniej wygladało
 public class UserProfileFragment extends Fragment {
     public static final String TAG = "user_profile_fragment";
     private Unbinder unbinder;
@@ -86,7 +86,6 @@ public class UserProfileFragment extends Fragment {
                     mBoxesText.setText(String.valueOf(userStatistics.getOpenedChests()));
                     mUserNameText.setText(userStatistics.getUsername());
                     mUserPercentToNextLvlText.setText((int) userStatistics.getToNextLevel() + "% to next");
-                    Toast.makeText(getContext(), "UserProfileResponse created!", Toast.LENGTH_SHORT).show();
                 });
     }
 

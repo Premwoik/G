@@ -43,7 +43,7 @@ public interface UserService {
     //ONLY FOR TESTS
     @GET("/user-management/list-users")
     Observable<ResponseBody> getUsers(@Header("Authorization") String token);
-    // TODO metoda do testów. losuje na nowo paramety usera(exp itd)
+    // metoda do testów. losuje na nowo paramety usera(exp itd)
     @GET("/user-management/reroll")
     Observable<Response<Void>> makeReroll(@Header("Authorization") String token);
 }

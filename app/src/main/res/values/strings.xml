@@ -11,7 +11,6 @@
 
     <string name="action_settings">Settings</string>
     <string name="token_mb">pk.eyJ1Ijoic29yeW8xIiwiYSI6ImNqZm8xdnkwMDBlY20zMnJxa3lxZzFqcGQifQ.mzqYTdHstDvURZNd-_ZLZg</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="menu_map">Map</string>
     <string name="menu_profile">Profile</string>

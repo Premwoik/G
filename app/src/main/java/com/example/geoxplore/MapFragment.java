@@ -72,7 +72,6 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Toast.makeText(getContext(), "MapFragment created!", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -84,12 +83,19 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
         buildingPlugin = new BuildingPlugin(mapView, mapboxMap);
         buildingPlugin.setVisibility(true);
         enableLocationPlugin();
+
+        //TODO 1.POLECAM ZACZAC OD TEGO (TO CO JA PISALEM)
         setInitialParams();
         addHomeMarkerAndLoadBoxes();
         setOnMarkerClickListener();
-
+        // XD XD 05:00
     }
-
+    private void setInitialParams() {
+        mapboxMap.setCameraPosition(new CameraPosition.Builder().target(new LatLng(50.06688579999999, 19.91361919999997)).build());
+        mapboxMap.setMinZoomPreference(15);
+        mapboxMap.setMaxZoomPreference(19);
+        mapboxMap.setZoom(17);
+    }
 
     private void addHomeMarkerAndLoadBoxes() {
         LatLng cords = SavedData.getUserHome(getContext());
@@ -149,21 +155,17 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
 
     private void setOnMarkerClickListener() {
         mapboxMap.setOnMarkerClickListener(marker -> {
+            //TODO jakos lepiej sprawdzać czym jest klikniety marker
             if (marker.getTitle() == null || !marker.getTitle().equals(HOME_MARKER_TITLE)) {
                 Toast.makeText(getContext(), R.string.click_on_box, Toast.LENGTH_SHORT).show();
-                marker.remove();
+                marker.remove(); //TODO kiedys dodac przejscie do aktywnosci z otwieraniem skrzynki
                 return true;
             }
             return false;
         });
     }
 
-    private void setInitialParams() {
-        mapboxMap.setCameraPosition(new CameraPosition.Builder().target(new LatLng(50.06688579999999, 19.91361919999997)).build());
-        mapboxMap.setMinZoomPreference(15);
-        mapboxMap.setMaxZoomPreference(19);
-        mapboxMap.setZoom(17);
-    }
+
 
     @SuppressWarnings({"MissingPermission"})
     private void enableLocationPlugin() {

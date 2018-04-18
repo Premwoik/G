@@ -22,9 +22,7 @@ import com.example.geoxplore.dummy.DummyContent;
 public class RankingFragment extends Fragment {
     public static final String TAG = "ranking_fragment";
 
-    // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
     private int mColumnCount = 1;
 //    private OnListFragmentInteractionListener mListener;
 
@@ -32,10 +30,10 @@ public class RankingFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
+    // TODO zrobic ranking
     public RankingFragment() {
     }
 
-    // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
     public static RankingFragment newInstance(int columnCount) {
         RankingFragment fragment = new RankingFragment();
@@ -102,7 +100,6 @@ public class RankingFragment extends Fragment {
 //     * >Communicating with Other Fragments</a> for more information.
 //     */
 //    public interface OnListFragmentInteractionListener {
-//        // TODO: Update argument type and name
 //        void onListFragmentInteraction(DummyItem item);
 //    }
 }
