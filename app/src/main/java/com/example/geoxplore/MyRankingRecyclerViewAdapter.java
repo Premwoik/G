@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.geoxplore.api.model.UserStatsRanking;
 import com.example.geoxplore.dummy.DummyContent;
 
 import java.util.List;
@@ -18,11 +19,12 @@ import java.util.List;
 // */
 public class MyRankingRecyclerViewAdapter extends RecyclerView.Adapter<MyRankingRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyContent.DummyItem> mValues;
+    //private final List<DummyContent.DummyItem> mValues;
+    private List<UserStatsRanking> usersStats;
 //    private final OnListFragmentInteractionListener mListener;
 
-    public MyRankingRecyclerViewAdapter(List<DummyContent.DummyItem> items) {
-        mValues = items;
+    public MyRankingRecyclerViewAdapter(List<UserStatsRanking> items) {
+        usersStats = items;
 //        mListener = listener;
     }
 
@@ -35,17 +37,20 @@ public class MyRankingRecyclerViewAdapter extends RecyclerView.Adapter<MyRanking
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        UserStatsRanking userStatsRanking = usersStats.get(position);
+        String username = userStatsRanking.getUsername();
+        int openedChests = userStatsRanking.getOpenedChests();
+        int level = userStatsRanking.getLevel();
+
+        holder.mUserInfo.setText(position +". "+ username+" "+level+"lvl "+openedChests+"oc");
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(v.getContext(), "Clicked!", Toast.LENGTH_SHORT).show();
 //                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
+                // Notify the active callbacks interface (the activity, if the
+                // fragment is attached to one) that an item has been selected.
 //                    mListener.onListFragmentInteraction(holder.mItem);
 //                }
             }
@@ -54,25 +59,23 @@ public class MyRankingRecyclerViewAdapter extends RecyclerView.Adapter<MyRanking
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return usersStats.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public DummyContent.DummyItem mItem;
+        public final TextView mUserInfo;
+
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mUserInfo = (TextView) view.findViewById(R.id.user_info);
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString() + " '" + mUserInfo.getText() + "'";
         }
     }
 }

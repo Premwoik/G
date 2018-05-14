@@ -10,7 +10,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.geoxplore.api.ApiUtils;
+import com.example.geoxplore.api.model.UserStatsRanking;
+import com.example.geoxplore.api.service.UserService;
 import com.example.geoxplore.dummy.DummyContent;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 
 ///**
@@ -56,6 +65,8 @@ public class RankingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_ranking_list, container, false);
+        List<UserStatsRanking> userStatsRankingList = new LinkedList<UserStatsRanking>();
+        userStatsRankingList.add(new UserStatsRanking("error", 0, 0));
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -66,7 +77,15 @@ public class RankingFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyRankingRecyclerViewAdapter(DummyContent.ITEMS));
+            //TODO token musimy gdzieś zapisać
+            ApiUtils
+                    .getService(UserService.class)
+                    .getRanking("Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqdXplZiIsImV4cCI6MTUyNDg5NzQxOX0.1XZC5IHfk0WD_Z5eEQ7RvjDSBQmEkWm5Z2B15Om4gqhvAaYvqrrqdxvhC9TZz4SETaKEKpfN5Sr3y9lP-PKh2w")
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .onErrorReturn(x -> userStatsRankingList )
+                    .subscribe(x -> recyclerView.setAdapter(new MyRankingRecyclerViewAdapter(x)));
+            //recyclerView.setAdapter(new MyRankingRecyclerViewAdapter(DummyContent.ITEMS));
         }
         return view;
     }
