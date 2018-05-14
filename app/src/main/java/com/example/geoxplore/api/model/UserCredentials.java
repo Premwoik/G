@@ -24,4 +24,8 @@ public class UserCredentials {
     public String getPassword() {
         return password;
     }
+
+    public static boolean validate(UserCredentials credentials){
+        return !credentials.getPassword().isEmpty() && !credentials.getUsername().isEmpty();
+    }
 }

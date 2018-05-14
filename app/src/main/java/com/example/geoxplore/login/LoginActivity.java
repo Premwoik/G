@@ -15,11 +15,15 @@ import com.example.geoxplore.api.ApiUtils;
 import com.example.geoxplore.api.model.SecurityToken;
 import com.example.geoxplore.api.model.UserCredentials;
 import com.example.geoxplore.api.service.UserService;
+import com.example.geoxplore.utils.SavedData;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class LoginActivity extends AppCompatActivity {
+    public static final String USERNAME = "username";
+    public static final String PASSWORD = "password";
+
     private EditText mLogin;
     private EditText mPassword;
     private TextView mForgottenPassword;
@@ -37,45 +41,66 @@ public class LoginActivity extends AppCompatActivity {
         mForgottenPassword = (TextView) findViewById(R.id.tv_forgottenPassword);
         mLoginButtonCV = (CardView) findViewById(R.id.cv_loginButton);
 
-        mLoginButtonCV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loginWithApi(mLogin.getText().toString(), mPassword.getText().toString());
+        loginUsingSavedCredentials();
 
-            }
+        mLoginButtonCV.setOnClickListener(v -> {
+            String login = mLogin.getText().toString();
+            String password = mPassword.getText().toString();
+            UserCredentials credentials = new UserCredentials(login, password);
+            loginWithApi(credentials);
+
         });
 
         mForgottenPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               //TODO przypominanie hasła (potrzebne API)
+                //TODO przypominanie hasła (potrzebne API)
             }
         });
 
         Intent intent = getIntent();
 
-        if(intent!=null && intent.hasExtra(Intent.EXTRA_USER)){
+        if (intent != null && intent.hasExtra(Intent.EXTRA_USER)) {
             mLogin.setText(intent.getStringExtra(Intent.EXTRA_USER));
         }
     }
 
-    private void loginWithApi(String username, String password){
+    private void loginUsingSavedCredentials(){
+        try{
+            Bundle bundle = getIntent().getExtras();
+            String username = bundle.getString(USERNAME);
+            String password = bundle.getString(PASSWORD);
+            if(username != null && password != null) {
+                mLogin.setText(username);
+                mPassword.setText(password);
+                loginWithApi(new UserCredentials(username, password));
+            }
+        }
+        catch (NullPointerException ex){
+            //NO DATA TO LOGIN
+        }
+    }
+
+
+    private void loginWithApi(final UserCredentials credentials) {
         ApiUtils
                 .getService(UserService.class)
-                .login(new UserCredentials(username, password))
+                .login(credentials)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .onErrorReturn(x -> new SecurityToken("ERROR"))
-                .subscribe(x -> httpStatusService(x.getToken()));
+                .subscribe(x -> httpStatusService(x.getToken(), credentials));
     }
 
-    public void httpStatusService(final String token){
-        switch(token){
-            case "ERROR":{
-                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+    public void httpStatusService(final String token, final UserCredentials credentials) {
+        switch (token) {
+            case "ERROR": {
+                Toast.makeText(getApplicationContext(), "Try again!", Toast.LENGTH_LONG).show();
                 break;
             }
             default: {
+                SavedData.saveLoggedUserCredentials(getApplicationContext(), credentials);
+                Toast.makeText(getApplicationContext(), "Logged!", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 intent.putExtra(Intent.EXTRA_USER, token);
                 startActivity(intent);

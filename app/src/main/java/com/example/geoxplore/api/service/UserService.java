@@ -27,16 +27,16 @@ public interface UserService {
     @POST("/login")
     Observable<SecurityToken> login(@Body UserCredentials credentials);
 
-    @GET("/user-management/my-statistics")
+    @GET("/user/my-statistics")
     Observable<UserStatistics> getUserStats(@Header("Authorization") String token);
 
-    @POST("/user-management/set-home")
+    @POST("/user/set-home")
     Observable<Response<Void>> setHome(@Header("Authorization") String token, @Body HomeCords cords);
 
-    @GET("/user-management/chests")
+    @GET("/user/chests")
     Observable<List<Chest>> getChests(@Header("Authorization") String token);
 
-    @GET("/user-management/ranking")
+    @GET("/community/ranking")
     Observable<List<UserStatsRanking>> getRanking(@Header("Authorization") String token);
 
 

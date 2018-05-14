@@ -3,7 +3,7 @@
     <color name="colorPrimary">#62D5A4</color>
     <color name="colorPrimaryDark">#6F9A8E</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="separator_color" >#80878E</color>
+    <color name="separator_color">#80878E</color>
     <color name="exp_bar_background">#637c86</color>
     <color name="exp_bar_progress">#D7D8D7</color>
     <color name="user_profile_background">#627683</color>

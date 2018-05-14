@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.example.geoxplore.api.model.UserCredentials;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 
 /**
@@ -13,6 +14,8 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 public final class SavedData {
     private static final String USR_HOME_LATITUDE = "usr_home_latitude";
     private static final String USR_HOME_LONGITUDE = "usr_home_longitude";
+    private static final String USR_PASSWORD = "usr_pwd";
+    private static final String USR_USERNAME = "usr_log";
 
     private static SharedPreferences getPreferences(Context ctx) {
         return PreferenceManager.getDefaultSharedPreferences(ctx);
@@ -33,10 +36,25 @@ public final class SavedData {
         return longitude !=0 && latitude !=0? new LatLng(latitude,longitude): null;
     }
 
+    public static UserCredentials getLoggedUserCredentials (Context ctx){
+        String username = getPreferences(ctx).getString(USR_USERNAME, "");
+        String password = getPreferences(ctx).getString(USR_PASSWORD, "");
+        return new UserCredentials(username, password);
+    }
+
+    public static void saveLoggedUserCredentials (Context ctx, UserCredentials credentials){
+        SharedPreferences.Editor editor = getPreferences(ctx).edit();
+        editor.putString(USR_USERNAME, credentials.getUsername());
+        editor.putString(USR_PASSWORD, credentials.getPassword());
+        editor.apply();
+    }
+
     public static void clear(Context ctx){
         SharedPreferences.Editor editor = getPreferences(ctx).edit();
         editor.remove(USR_HOME_LONGITUDE);
         editor.remove(USR_HOME_LATITUDE);
+        editor.remove(USR_PASSWORD);
+        editor.remove(USR_USERNAME);
         editor.apply();
     }
 }

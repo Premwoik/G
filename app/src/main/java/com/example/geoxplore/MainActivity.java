@@ -110,6 +110,7 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_logout:
                 SavedData.clear(getApplicationContext());
+                super.onBackPressed();
                 break;
             default:
                 Toast.makeText(getApplicationContext(), "No action yet! " + id, Toast.LENGTH_SHORT).show();

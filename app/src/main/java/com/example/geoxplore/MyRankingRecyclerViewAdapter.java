@@ -8,7 +8,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.geoxplore.api.model.UserStatsRanking;
-import com.example.geoxplore.dummy.DummyContent;
 
 import java.util.List;
 

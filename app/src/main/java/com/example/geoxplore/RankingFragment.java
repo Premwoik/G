@@ -1,6 +1,7 @@
 package com.example.geoxplore;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -13,7 +14,6 @@ import android.view.ViewGroup;
 import com.example.geoxplore.api.ApiUtils;
 import com.example.geoxplore.api.model.UserStatsRanking;
 import com.example.geoxplore.api.service.UserService;
-import com.example.geoxplore.dummy.DummyContent;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -80,7 +80,7 @@ public class RankingFragment extends Fragment {
             //TODO token musimy gdzieś zapisać
             ApiUtils
                     .getService(UserService.class)
-                    .getRanking("Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqdXplZiIsImV4cCI6MTUyNDg5NzQxOX0.1XZC5IHfk0WD_Z5eEQ7RvjDSBQmEkWm5Z2B15Om4gqhvAaYvqrrqdxvhC9TZz4SETaKEKpfN5Sr3y9lP-PKh2w")
+                    .getRanking(getArguments().getString(Intent.EXTRA_USER))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .onErrorReturn(x -> userStatsRankingList )

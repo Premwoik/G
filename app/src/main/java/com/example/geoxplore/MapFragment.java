@@ -5,7 +5,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +16,6 @@ import com.example.geoxplore.api.model.HomeCords;
 import com.example.geoxplore.api.service.UserService;
 import com.example.geoxplore.utils.SavedData;
 import com.mapbox.androidsdk.plugins.building.BuildingPlugin;
-import com.mapbox.mapboxsdk.annotations.Icon;
-import com.mapbox.mapboxsdk.annotations.IconFactory;
-import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
@@ -129,7 +125,7 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
                                 Toast.makeText(getContext(), R.string.map_home_set_msg, Toast.LENGTH_SHORT).show();
                                 loadBoxes();
                             } else {
-                                Toast.makeText(getContext(), "ERROR i elo", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "error code: " + voidResponse.errorBody().string(), Toast.LENGTH_SHORT).show();
                             }
                         });
             }
@@ -155,17 +151,15 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
 
     private void setOnMarkerClickListener() {
         mapboxMap.setOnMarkerClickListener(marker -> {
-            //TODO jakos lepiej sprawdzać czym jest klikniety marker
             if (marker.getTitle() == null || !marker.getTitle().equals(HOME_MARKER_TITLE)) {
-                Toast.makeText(getContext(), R.string.click_on_box, Toast.LENGTH_SHORT).show();
-                marker.remove(); //TODO kiedys dodac przejscie do aktywnosci z otwieraniem skrzynki
+                Intent openBox = new Intent(this.getActivity(), OpenBoxActivity.class);
+                startActivity(openBox);
+                marker.remove();
                 return true;
             }
             return false;
         });
     }
-
-
 
     @SuppressWarnings({"MissingPermission"})
     private void enableLocationPlugin() {
