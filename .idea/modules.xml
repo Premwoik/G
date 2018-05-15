@@ -3,10 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/GeoExplorer2.iml" filepath="$PROJECT_DIR$/GeoExplorer2.iml" />
-      <module fileurl="file://$PROJECT_DIR$/GeoXplore.iml" filepath="$PROJECT_DIR$/GeoXplore.iml" />
       <module fileurl="file://C:\Users\Kayser Sose\Downloads\Github-GeoXplore\GeoExplorer2\GeoXplore.iml" filepath="C:\Users\Kayser Sose\Downloads\Github-GeoXplore\GeoExplorer2\GeoXplore.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\Kayser Sose\Downloads\Github-GeoXplore\GeoExplorer2\app\app.iml" filepath="C:\Users\Kayser Sose\Downloads\Github-GeoXplore\GeoExplorer2\app\app.iml" />
     </modules>
   </component>
 </project>
