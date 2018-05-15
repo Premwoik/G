@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity
     //TODO dodac lepsze ikonki
         switch (id) {
             case R.id.nav_map:
+                fragmentBundle.putBoolean(MapFragment.RESET_HOME, false);
                 MapFragment fragment = new MapFragment();
                 fragment.setArguments(fragmentBundle);
                 loadFragment(fragment, MapFragment.TAG);
@@ -106,9 +107,10 @@ public class MainActivity extends AppCompatActivity
                 super.onBackPressed();
                 break;
             case R.id.nav_settings:
-                SettingsFragment fragment2 = new SettingsFragment();
-                fragment2.setArguments(fragmentBundle);
-                loadFragment(fragment2, SettingsFragment.TAG);
+                fragmentBundle.putBoolean(MapFragment.RESET_HOME, true);
+                fragment = new MapFragment();
+                fragment.setArguments(fragmentBundle);
+                loadFragment(fragment, MapFragment.TAG);
                 break;
             default:
                 Toast.makeText(getApplicationContext(), "No action yet! " + id, Toast.LENGTH_SHORT).show();
@@ -121,7 +123,7 @@ public class MainActivity extends AppCompatActivity
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void loadFragment(final Fragment fragment, final String tag) {
-        if (Objects.equals(CURRENT_TAG, tag)) return;
+//        if (Objects.equals(CURRENT_TAG, tag)) return;
 
         Runnable pendingRunnable = () -> {
             // update the main content by replacing fragments

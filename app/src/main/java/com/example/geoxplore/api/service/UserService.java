@@ -33,7 +33,7 @@ public interface UserService {
     @POST("/user/set-home")
     Observable<Response<Void>> setHome(@Header("Authorization") String token, @Body HomeCords cords);
 
-    @GET("/user/gethome")
+    @GET("/user/get-home")
     Observable<HomeCords> getHome(@Header("Authorization") String token);
 
     @GET("/user/chests")
