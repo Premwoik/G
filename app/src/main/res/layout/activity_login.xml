@@ -87,7 +87,19 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="111dp"
+        android:fontFamily="@font/amarante"
         android:text="GeoXplore"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display3" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Display3"
+        android:id="@+id/textView3" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_below="@+id/login_activity_loading_bar"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/textView3"
+        android:rotation="10"
+        app:srcCompat="@drawable/box" />
 
 </RelativeLayout>
