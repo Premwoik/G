@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity
         // TODO ogarnac jakos lepiej ladowanie fragmentow i przekazywanie do nich tokena
 
         int id = item.getItemId();
-
+    //TODO dodac lepsze ikonki
         switch (id) {
             case R.id.nav_map:
                 MapFragment fragment = new MapFragment();

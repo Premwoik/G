@@ -93,9 +93,6 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
         buildingPlugin.setVisibility(true);
         enableLocationPlugin();
 
-
-
-
         setInitialParams();
         addHomeMarkerAndLoadBoxes();
         setOnMarkerClickListener();
@@ -104,6 +101,7 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
         mapboxMap.setMinZoomPreference(MapConfig.minZoom);
         mapboxMap.setMaxZoomPreference(MapConfig.maxZoom);
         mapboxMap.setZoom(MapConfig.defaultZoom);
+        mapboxMap.setStyleUrl("mapbox://styles/belaab/cjg4bq8vq1ir42rnyljaz229s");
 
         Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.home2);
         Bitmap bm2 = BitmapFactory.decodeResource(getResources(), R.drawable.box2);
@@ -113,12 +111,21 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
     }
 
     private void addHomeMarkerAndLoadBoxes() {
-        LatLng cords = SavedData.getUserHome(getContext());
-        if (cords != null) {
-            useSavedUserHome(cords);
-        } else {
-            chooseNewUserHome();
-        }
+        ApiUtils.getService(UserService.class)
+                .getHome(getArguments().getString(Intent.EXTRA_USER))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .onErrorReturn(x -> new HomeCords("",""))
+                .subscribe(voidResponse -> {
+                    if(voidResponse.isValid()) {
+                        Double latitude = Double.valueOf(voidResponse.getLatitude());
+                        Double longitude = Double.valueOf(voidResponse.getLongitude());
+                        useSavedUserHome(new LatLng(latitude, longitude));
+                    }
+                    else {
+                        chooseNewUserHome();
+                    }
+                });
     }
 
     private void useSavedUserHome(LatLng cords) {
@@ -128,12 +135,10 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
     }
 
     private void chooseNewUserHome() {
-
         Toast.makeText(getContext(), "Kliknij na mapę, aby ustawić dom", Toast.LENGTH_SHORT).show();
         mapboxMap.addOnMapClickListener(new MapboxMap.OnMapClickListener() {
             @Override
             public void onMapClick(@NonNull LatLng point) {
-
                 ApiUtils.getService(UserService.class)
                         .setHome(getArguments().getString(Intent.EXTRA_USER), new HomeCords(point))
                         .subscribeOn(Schedulers.io())
@@ -141,7 +146,6 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
                         .subscribe(voidResponse -> {
                             if (voidResponse.code() == 200) {
                                 mapboxMap.removeOnMapClickListener(this);
-                                SavedData.setUserHome(getContext(), point);
                                 mapboxMap.addMarker(new MarkerOptions().setPosition(point).title(HOME_MARKER_TITLE).icon(icon_home));
                                 Toast.makeText(getContext(), R.string.map_home_set_msg, Toast.LENGTH_SHORT).show();
                                 loadBoxes();
@@ -233,7 +237,6 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
         locationEngine = new LocationEngineProvider(getContext()).obtainBestLocationEngineAvailable();
         locationEngine.setPriority(LocationEnginePriority.HIGH_ACCURACY);
         locationEngine.activate();
-
         Location lastLocation = locationEngine.getLastLocation();
         if (lastLocation != null) {
             setCameraPosition(lastLocation);
