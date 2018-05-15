@@ -1,15 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/user_info"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:id="@+id/tv_rank"
+        android:gravity="center"
+        android:layout_width="40dp"
+        android:layout_height="30dp"
         android:layout_margin="@dimen/text_margin"
         android:textAppearance="?attr/textAppearanceListItem" />
+
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="90dp"
+        android:layout_height="30dp"
+        android:layout_alignStart="@+id/tv_rank"
+        android:layout_alignTop="@+id/tv_rank"
+        android:layout_marginStart="39dp"
+        android:gravity="center_vertical" />
+
+    <TextView
+        android:id="@+id/tv_level"
+        android:layout_width="40dp"
+        android:layout_height="30dp"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/tv_name"
+        android:gravity="center_vertical"/>
+
+    <TextView
+        android:id="@+id/tv_opened_chest"
+        android:layout_width="40dp"
+        android:layout_height="30dp"
+        android:layout_alignBaseline="@+id/tv_rank"
+        android:layout_alignBottom="@+id/tv_rank"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/tv_level"
+        android:gravity="center_vertical"/>
 
     <View
         android:layout_width="match_parent"
@@ -17,4 +46,5 @@
         android:background="#dadada"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp" />
-</LinearLayout>
+
+</RelativeLayout>

@@ -23,6 +23,8 @@ public class RegActivity extends AppCompatActivity {
     private EditText mPasswordRepeat;
     private EditText mEmail;
 
+    private boolean pass=false, rpass=false, login=false, email=false;
+
     private CardView mRegistryButton;
 
 
@@ -35,7 +37,10 @@ public class RegActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reg);
 
+
+
         mRegistryButton = (CardView) findViewById(R.id.cv_register);
+
 
         mLogin = (EditText) findViewById(R.id.et_login);
         mPassword = (EditText) findViewById(R.id.et_password);
@@ -47,6 +52,9 @@ public class RegActivity extends AppCompatActivity {
             public void validate(EditText editText, String text) {
                 if(text.isEmpty() || text.length()<4 || text.length()>16){
                     editText.setError(getResources().getString(R.string.ms_invalid_login));
+                    login=false;
+                }else{
+                    login=true;
                 }
             }
         });
@@ -55,6 +63,7 @@ public class RegActivity extends AppCompatActivity {
             @Override
             public void validate(EditText editText, String text) {
                 //TODO Póki co nie trzeba
+                pass = true;
             }
         });
 
@@ -64,6 +73,9 @@ public class RegActivity extends AppCompatActivity {
                 final EditText password = getmPassword();
                 if(!text.equals(password.getText().toString())){
                     editText.setError(getResources().getString(R.string.ms_different_passwords));
+                    rpass = false;
+                }else{
+                    rpass = true;
                 }
             }
         });
@@ -73,6 +85,9 @@ public class RegActivity extends AppCompatActivity {
             public void validate(EditText editText, String text) {
                 if(!TextValidator.isValidEmail(text)){
                     editText.setError(getResources().getString(R.string.ms_invalid_email));
+                    email = false;
+                }else{
+                    email = true;
                 }
             }
         });
@@ -80,12 +95,19 @@ public class RegActivity extends AppCompatActivity {
         mRegistryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                registerWithApi(mEmail.getText().toString(), mLogin.getText().toString(), mPassword.getText().toString());
+                if(validateAll()){
+                    registerWithApi(mEmail.getText().toString(), mLogin.getText().toString(), mPassword.getText().toString());
+                }else {
+                    Toast.makeText(getApplicationContext(),"All data must be correct!",Toast.LENGTH_LONG).show();
+                }
+
             }
         });
 
 
     }
+
+
 
 
     private void httpStatusService(final int status){
@@ -108,7 +130,6 @@ public class RegActivity extends AppCompatActivity {
             default:
                 Toast.makeText(getApplicationContext(), "coś nie pykło", Toast.LENGTH_LONG).show();
         }
-        //TODO Sprawdzanie danych przed wysłaniem zapytania
     }
 
     private void registerWithApi(String email, String username, String password){
@@ -119,5 +140,9 @@ public class RegActivity extends AppCompatActivity {
                 .observeOn(AndroidSchedulers.mainThread())
                 .onErrorReturn(x-> {x.printStackTrace(); return null;})
                 .subscribe(x-> httpStatusService(x.code()));
+    }
+
+    private boolean validateAll(){
+        return login && pass && rpass && email;
     }
 }

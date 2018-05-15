@@ -41,7 +41,10 @@ public class MyRankingRecyclerViewAdapter extends RecyclerView.Adapter<MyRanking
         int openedChests = userStatsRanking.getOpenedChests();
         int level = userStatsRanking.getLevel();
 
-        holder.mUserInfo.setText(position +". "+ username+" "+level+"lvl "+openedChests+"oc");
+        holder.mRank.setText(String.valueOf(position));
+        holder.mName.setText(username);
+        holder.mLevel.setText(String.valueOf(level));
+        holder.mOpenedChest.setText(String.valueOf(openedChests));
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,18 +66,21 @@ public class MyRankingRecyclerViewAdapter extends RecyclerView.Adapter<MyRanking
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mUserInfo;
+        public final TextView mRank, mName, mLevel, mOpenedChest;
 
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mUserInfo = (TextView) view.findViewById(R.id.user_info);
+            mRank = (TextView) view.findViewById(R.id.tv_rank);
+            mName = (TextView) view.findViewById(R.id.tv_name);
+            mLevel = (TextView) view.findViewById(R.id.tv_level);
+            mOpenedChest = (TextView) view.findViewById(R.id.tv_opened_chest);
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mUserInfo.getText() + "'";
+            return super.toString();
         }
     }
 }
