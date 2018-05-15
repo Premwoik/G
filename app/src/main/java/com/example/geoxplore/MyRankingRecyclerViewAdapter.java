@@ -41,7 +41,7 @@ public class MyRankingRecyclerViewAdapter extends RecyclerView.Adapter<MyRanking
         int openedChests = userStatsRanking.getOpenedChests();
         int level = userStatsRanking.getLevel();
 
-        holder.mRank.setText(String.valueOf(position));
+        holder.mRank.setText(String.valueOf(position+1));
         holder.mName.setText(username);
         holder.mLevel.setText(String.valueOf(level));
         holder.mOpenedChest.setText(String.valueOf(openedChests));

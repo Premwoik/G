@@ -1,6 +1,8 @@
 package com.example.geoxplore.map;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.geoxplore.MainActivity;
 import com.example.geoxplore.OpenBoxActivity;
 import com.example.geoxplore.R;
 import com.example.geoxplore.api.ApiUtils;
@@ -20,6 +23,8 @@ import com.example.geoxplore.api.service.UserService;
 import com.example.geoxplore.map.MapConfig;
 import com.example.geoxplore.utils.SavedData;
 import com.mapbox.androidsdk.plugins.building.BuildingPlugin;
+import com.mapbox.mapboxsdk.annotations.Icon;
+import com.mapbox.mapboxsdk.annotations.IconFactory;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
@@ -54,6 +59,9 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
     private LocationEngine locationEngine;
     private MapboxMap mapboxMap;
     private final String HOME_MARKER_TITLE = "My Home";
+
+    private IconFactory iconFactory;
+    private Icon icon;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -93,6 +101,11 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
         mapboxMap.setMinZoomPreference(MapConfig.minZoom);
         mapboxMap.setMaxZoomPreference(MapConfig.maxZoom);
         mapboxMap.setZoom(MapConfig.defaultZoom);
+        mapboxMap.setStyleUrl("mapbox://styles/belaab/cjg4bq8vq1ir42rnyljaz229s");
+
+        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.home2);
+        iconFactory = IconFactory.getInstance(this.getContext());
+        icon = iconFactory.fromBitmap(bm);
     }
 
     private void addHomeMarkerAndLoadBoxes() {
@@ -114,7 +127,7 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
     }
 
     private void useSavedUserHome(LatLng cords) {
-        mapboxMap.addMarker(new MarkerOptions().setPosition(cords).title(HOME_MARKER_TITLE));
+        mapboxMap.addMarker(new MarkerOptions().setPosition(cords).title(HOME_MARKER_TITLE).icon(icon));
 //        mapboxMap.setCameraPosition(new CameraPosition.Builder().target(cords).build());
         loadBoxes();
     }
@@ -131,7 +144,7 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
                         .subscribe(voidResponse -> {
                             if (voidResponse.code() == 200) {
                                 mapboxMap.removeOnMapClickListener(this);
-                                mapboxMap.addMarker(new MarkerOptions().setPosition(point).title(HOME_MARKER_TITLE));
+                                mapboxMap.addMarker(new MarkerOptions().setPosition(point).title(HOME_MARKER_TITLE).icon(icon));
                                 Toast.makeText(getContext(), R.string.map_home_set_msg, Toast.LENGTH_SHORT).show();
                                 loadBoxes();
                             } else {
@@ -223,7 +236,6 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
         locationEngine = new LocationEngineProvider(getContext()).obtainBestLocationEngineAvailable();
         locationEngine.setPriority(LocationEnginePriority.HIGH_ACCURACY);
         locationEngine.activate();
-
         Location lastLocation = locationEngine.getLastLocation();
         if (lastLocation != null) {
             setCameraPosition(lastLocation);

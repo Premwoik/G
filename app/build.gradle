@@ -57,6 +57,8 @@ dependencies {
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-building:0.1.0'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 
+    testCompile 'org.junit.jupiter:junit-jupiter-api:5.0.1'
+    testCompile 'org.testng:testng:6.9.6'
 }
 
 configurations.all {
