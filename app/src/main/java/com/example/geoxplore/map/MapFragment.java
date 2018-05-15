@@ -61,7 +61,7 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
     private final String HOME_MARKER_TITLE = "My Home";
 
     private IconFactory iconFactory;
-    private Icon icon;
+    private Icon icon_home, icon_box;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -106,8 +106,10 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
         mapboxMap.setZoom(MapConfig.defaultZoom);
 
         Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.home2);
+        Bitmap bm2 = BitmapFactory.decodeResource(getResources(), R.drawable.box2);
         iconFactory = IconFactory.getInstance(this.getContext());
-        icon = iconFactory.fromBitmap(bm);
+        icon_home = iconFactory.fromBitmap(bm);
+        icon_box = iconFactory.fromBitmap(bm2);
     }
 
     private void addHomeMarkerAndLoadBoxes() {
@@ -120,7 +122,7 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
     }
 
     private void useSavedUserHome(LatLng cords) {
-        mapboxMap.addMarker(new MarkerOptions().setPosition(cords).title(HOME_MARKER_TITLE).icon(icon));
+        mapboxMap.addMarker(new MarkerOptions().setPosition(cords).title(HOME_MARKER_TITLE).icon(icon_home));
 //        mapboxMap.setCameraPosition(new CameraPosition.Builder().target(cords).build());
         loadBoxes();
     }
@@ -140,7 +142,7 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
                             if (voidResponse.code() == 200) {
                                 mapboxMap.removeOnMapClickListener(this);
                                 SavedData.setUserHome(getContext(), point);
-                                mapboxMap.addMarker(new MarkerOptions().setPosition(point).title(HOME_MARKER_TITLE).icon(icon);
+                                mapboxMap.addMarker(new MarkerOptions().setPosition(point).title(HOME_MARKER_TITLE).icon(icon_home));
                                 Toast.makeText(getContext(), R.string.map_home_set_msg, Toast.LENGTH_SHORT).show();
                                 loadBoxes();
                             } else {
@@ -162,7 +164,7 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
                     Toast.makeText(getContext(), "Boxes loaded", Toast.LENGTH_SHORT).show();
                     for (Chest chest : data) {
                         // TODO ustawic inna ikone
-                        mapboxMap.addMarker(new MarkerOptions().setPosition(chest.getLang()));
+                        mapboxMap.addMarker(new MarkerOptions().setPosition(chest.getLang()).icon(icon_box));
                     }
 
                 });
