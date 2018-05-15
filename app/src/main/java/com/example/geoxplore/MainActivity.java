@@ -84,7 +84,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        // TODO ogarnac, zeby w menu podswiatlene był ładnie aktualny fragment
         // TODO dodac profil tez do menu?
         // TODO ogarnac jakos lepiej ladowanie fragmentow i przekazywanie do nich tokena
 
