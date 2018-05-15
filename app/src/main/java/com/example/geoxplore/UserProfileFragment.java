@@ -27,7 +27,7 @@ import butterknife.Unbinder;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-//TODO no zrobic, zeby jakos ladniej wygladało
+//TODO no zrobic, zeby jakos ladniej wygladało TJ usunąć niedziałające pola
 public class UserProfileFragment extends Fragment {
     public static final String TAG = "user_profile_fragment";
     private Unbinder unbinder;

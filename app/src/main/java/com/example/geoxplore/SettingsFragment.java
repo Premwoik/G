@@ -10,11 +10,10 @@ import android.view.ViewGroup;
 
 import com.google.android.gms.plus.PlusOneButton;
 
-
+ //TODO lepiej settingsFragment, czy oddzielna aktywność?
 public class SettingsFragment extends Fragment {
     public static final String TAG = "settings_tag";
 
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -22,7 +21,6 @@ public class SettingsFragment extends Fragment {
     private static final int PLUS_ONE_REQUEST_CODE = 0;
     // The URL to +1.  Must be a valid URL.
     private final String PLUS_ONE_URL = "http://developer.android.com";
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     private PlusOneButton mPlusOneButton;
@@ -33,15 +31,7 @@ public class SettingsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SettingsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+
     public static SettingsFragment newInstance(String param1, String param2) {
         SettingsFragment fragment = new SettingsFragment();
         Bundle args = new Bundle();

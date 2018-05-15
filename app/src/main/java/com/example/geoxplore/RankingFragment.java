@@ -39,7 +39,6 @@ public class RankingFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    // TODO zrobic ranking
     public RankingFragment() {
     }
 
@@ -77,7 +76,6 @@ public class RankingFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            //TODO token musimy gdzieś zapisać
             ApiUtils
                     .getService(UserService.class)
                     .getRanking(getArguments().getString(Intent.EXTRA_USER))
