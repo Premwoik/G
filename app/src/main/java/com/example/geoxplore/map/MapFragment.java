@@ -1,4 +1,4 @@
-package com.example.geoxplore;
+package com.example.geoxplore.map;
 
 import android.content.Intent;
 import android.location.Location;
@@ -6,16 +6,21 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.geoxplore.OpenBoxActivity;
+import com.example.geoxplore.R;
 import com.example.geoxplore.api.ApiUtils;
 import com.example.geoxplore.api.model.Chest;
 import com.example.geoxplore.api.model.HomeCords;
 import com.example.geoxplore.api.service.UserService;
+import com.example.geoxplore.map.MapConfig;
 import com.example.geoxplore.utils.SavedData;
 import com.mapbox.androidsdk.plugins.building.BuildingPlugin;
+import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
@@ -80,17 +85,14 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
         buildingPlugin.setVisibility(true);
         enableLocationPlugin();
 
-        //TODO 1.POLECAM ZACZAC OD TEGO (TO CO JA PISALEM)
         setInitialParams();
         addHomeMarkerAndLoadBoxes();
         setOnMarkerClickListener();
-        // XD XD 05:00
     }
     private void setInitialParams() {
-        mapboxMap.setCameraPosition(new CameraPosition.Builder().target(new LatLng(50.06688579999999, 19.91361919999997)).build());
-        mapboxMap.setMinZoomPreference(15);
-        mapboxMap.setMaxZoomPreference(19);
-        mapboxMap.setZoom(17);
+        mapboxMap.setMinZoomPreference(MapConfig.minZoom);
+        mapboxMap.setMaxZoomPreference(MapConfig.maxZoom);
+        mapboxMap.setZoom(MapConfig.defaultZoom);
     }
 
     private void addHomeMarkerAndLoadBoxes() {
@@ -104,7 +106,7 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
 
     private void useSavedUserHome(LatLng cords) {
         mapboxMap.addMarker(new MarkerOptions().setPosition(cords).title(HOME_MARKER_TITLE));
-        mapboxMap.setCameraPosition(new CameraPosition.Builder().target(cords).build());
+//        mapboxMap.setCameraPosition(new CameraPosition.Builder().target(cords).build());
         loadBoxes();
     }
 
@@ -125,6 +127,7 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
                                 Toast.makeText(getContext(), R.string.map_home_set_msg, Toast.LENGTH_SHORT).show();
                                 loadBoxes();
                             } else {
+                                onMapClick(point);
                                 Toast.makeText(getContext(), "error code: " + voidResponse.errorBody().string(), Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -152,14 +155,41 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
     private void setOnMarkerClickListener() {
         mapboxMap.setOnMarkerClickListener(marker -> {
             if (marker.getTitle() == null || !marker.getTitle().equals(HOME_MARKER_TITLE)) {
-                Intent openBox = new Intent(this.getActivity(), OpenBoxActivity.class);
-                startActivity(openBox);
-                marker.remove();
-                return true;
+                return handleBoxMarkerClick(marker);
             }
+            handleHomeMarkerClick(marker);
             return false;
         });
     }
+
+    private boolean handleBoxMarkerClick(Marker box){
+        if(checkIfBoxIsInRange(box, locationPlugin.getLastKnownLocation())) {
+            Intent openBox = new Intent(this.getActivity(), OpenBoxActivity.class);
+            startActivity(openBox);
+            //TODO sprawdzić, czy skrzynka została poprawnie otworzona i zostało to wysłane do serwera
+            box.remove();
+            return true;
+        }
+        Toast.makeText(getContext(), "You are too far from box.", Toast.LENGTH_SHORT).show();
+        return false;
+    }
+
+    private boolean checkIfBoxIsInRange(Marker box, Location userLocation){
+        double boxLatitude = box.getPosition().getLatitude();
+        double boxLongitude = box.getPosition().getLongitude();
+        double userLatitude = userLocation.getLatitude();
+        double userLongitude = userLocation.getLongitude();
+
+        boolean checkedLongitude = Math.abs(boxLatitude - userLatitude) < MapConfig.range;
+        boolean checkedLatitude = Math.abs(boxLongitude - userLongitude) < MapConfig.range;
+
+        return checkedLatitude && checkedLongitude;
+    }
+
+    private void handleHomeMarkerClick(Marker home){
+
+    }
+
 
     @SuppressWarnings({"MissingPermission"})
     private void enableLocationPlugin() {

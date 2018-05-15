@@ -13,22 +13,15 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.geoxplore.api.ApiUtils;
-import com.example.geoxplore.api.model.UserRegistrationForm;
-import com.example.geoxplore.api.service.UserService;
+import com.example.geoxplore.map.MapFragment;
 import com.example.geoxplore.utils.SavedData;
 import com.mapbox.mapboxsdk.Mapbox;
 
 import java.util.Objects;
-
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -111,6 +104,11 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_logout:
                 SavedData.clear(getApplicationContext());
                 super.onBackPressed();
+                break;
+            case R.id.nav_settings:
+                SettingsFragment fragment2 = new SettingsFragment();
+                fragment2.setArguments(fragmentBundle);
+                loadFragment(fragment2, SettingsFragment.TAG);
                 break;
             default:
                 Toast.makeText(getApplicationContext(), "No action yet! " + id, Toast.LENGTH_SHORT).show();

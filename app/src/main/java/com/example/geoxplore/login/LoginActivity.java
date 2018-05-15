@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +18,8 @@ import com.example.geoxplore.api.model.UserCredentials;
 import com.example.geoxplore.api.service.UserService;
 import com.example.geoxplore.utils.SavedData;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -30,11 +33,14 @@ public class LoginActivity extends AppCompatActivity {
 
     private CardView mLoginButtonCV;
 
+    @BindView(R.id.login_activity_loading_bar)
+    ProgressBar loadingBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        ButterKnife.bind(this);
         mLogin = (EditText) findViewById(R.id.et_login);
         mPassword = (EditText) findViewById(R.id.et_password);
 
@@ -83,6 +89,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private void loginWithApi(final UserCredentials credentials) {
+        loadingBar.setVisibility(View.VISIBLE);
         ApiUtils
                 .getService(UserService.class)
                 .login(credentials)
@@ -104,6 +111,7 @@ public class LoginActivity extends AppCompatActivity {
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 intent.putExtra(Intent.EXTRA_USER, token);
                 startActivity(intent);
+                loadingBar.setVisibility(View.INVISIBLE);
             }
         }
 
