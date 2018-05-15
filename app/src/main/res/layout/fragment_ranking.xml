@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -45,6 +46,15 @@
         android:layout_height="1dp"
         android:background="#dadada"
         android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp" />
+        android:layout_marginRight="8dp"
+        android:id="@+id/view2" />
+
+    <ImageView
+        android:id="@+id/iv_reward"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignTop="@+id/tv_opened_chest"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/tv_opened_chest" />
 
 </RelativeLayout>

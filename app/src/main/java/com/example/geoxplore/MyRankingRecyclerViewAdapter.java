@@ -1,9 +1,11 @@
 package com.example.geoxplore;
 
+import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +47,7 @@ public class MyRankingRecyclerViewAdapter extends RecyclerView.Adapter<MyRanking
         holder.mName.setText(username);
         holder.mLevel.setText(String.valueOf(level));
         holder.mOpenedChest.setText(String.valueOf(openedChests));
+        holder.setReward(position);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,6 +70,7 @@ public class MyRankingRecyclerViewAdapter extends RecyclerView.Adapter<MyRanking
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mRank, mName, mLevel, mOpenedChest;
+        public final ImageView mReward;
 
 
         public ViewHolder(View view) {
@@ -76,6 +80,18 @@ public class MyRankingRecyclerViewAdapter extends RecyclerView.Adapter<MyRanking
             mName = (TextView) view.findViewById(R.id.tv_name);
             mLevel = (TextView) view.findViewById(R.id.tv_level);
             mOpenedChest = (TextView) view.findViewById(R.id.tv_opened_chest);
+            mReward = (ImageView) view.findViewById(R.id.iv_reward);
+        }
+
+        public void setReward(final int position){
+            Resources res = this.itemView.getContext().getResources();
+            switch(position){
+                case 0: mReward.setImageDrawable(res.getDrawable(R.drawable.gold_medal)); break;
+                case 1: mReward.setImageDrawable(res.getDrawable(R.drawable.silver_medal)); break;
+                case 2: mReward.setImageDrawable(res.getDrawable(R.drawable.bronze_medal)); break;
+                default: mReward.setImageDrawable(null);
+            }
+
         }
 
         @Override
@@ -83,4 +99,6 @@ public class MyRankingRecyclerViewAdapter extends RecyclerView.Adapter<MyRanking
             return super.toString();
         }
     }
+
+
 }
