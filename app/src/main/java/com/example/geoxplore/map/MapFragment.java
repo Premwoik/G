@@ -163,7 +163,6 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
                 .subscribe(data -> {
                     Toast.makeText(getContext(), "Boxes loaded", Toast.LENGTH_SHORT).show();
                     for (Chest chest : data) {
-                        // TODO ustawic inna ikone
                         mapboxMap.addMarker(new MarkerOptions().setPosition(chest.getLang()).icon(icon_box));
                     }
 
