@@ -8,27 +8,26 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+<<<<<<< HEAD
 import com.example.geoxplore.MainActivity;
 import com.example.geoxplore.MyRankingRecyclerViewAdapter;
+=======
+>>>>>>> 55fa1de75e6e85dadc221ea69169476afcc21181
 import com.example.geoxplore.OpenBoxActivity;
 import com.example.geoxplore.R;
 import com.example.geoxplore.api.ApiUtils;
 import com.example.geoxplore.api.model.Chest;
 import com.example.geoxplore.api.model.HomeCords;
 import com.example.geoxplore.api.service.UserService;
-import com.example.geoxplore.map.MapConfig;
-import com.example.geoxplore.utils.SavedData;
 import com.mapbox.androidsdk.plugins.building.BuildingPlugin;
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
-import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
@@ -53,6 +52,7 @@ import timber.log.Timber;
 
 public class MapFragment extends SupportMapFragment implements LocationEngineListener, PermissionsListener {
     public static final String TAG = "map_fragment";
+    public static final String RESET_HOME = "reset_home";
 
     private BuildingPlugin buildingPlugin;
     private MapView mapView;
@@ -99,7 +99,9 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
         setInitialParams();
         addHomeMarkerAndLoadBoxes();
         setOnMarkerClickListener();
+        setCameraPosition(locationPlugin.getLastKnownLocation());
     }
+
     private void setInitialParams() {
         mapboxMap.setMinZoomPreference(MapConfig.minZoom);
         mapboxMap.setMaxZoomPreference(MapConfig.maxZoom);
@@ -114,21 +116,24 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
     }
 
     private void addHomeMarkerAndLoadBoxes() {
-        ApiUtils.getService(UserService.class)
-                .getHome(getArguments().getString(Intent.EXTRA_USER))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .onErrorReturn(x -> new HomeCords("",""))
-                .subscribe(voidResponse -> {
-                    if(voidResponse.isValid()) {
-                        Double latitude = Double.valueOf(voidResponse.getLatitude());
-                        Double longitude = Double.valueOf(voidResponse.getLongitude());
-                        useSavedUserHome(new LatLng(latitude, longitude));
-                    }
-                    else {
-                        chooseNewUserHome();
-                    }
-                });
+        if (getArguments().getBoolean(RESET_HOME)) {
+            chooseNewUserHome();
+        } else {
+            ApiUtils.getService(UserService.class)
+                    .getHome(getArguments().getString(Intent.EXTRA_USER))
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .onErrorReturn(x -> new HomeCords("", ""))
+                    .subscribe(voidResponse -> {
+                        if (voidResponse.isValid()) {
+                            Double latitude = Double.valueOf(voidResponse.getLatitude());
+                            Double longitude = Double.valueOf(voidResponse.getLongitude());
+                            useSavedUserHome(new LatLng(latitude, longitude));
+                        } else {
+                            chooseNewUserHome();
+                        }
+                    });
+        }
     }
 
     private void useSavedUserHome(LatLng cords) {
@@ -188,8 +193,8 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
         });
     }
 
-    private boolean handleBoxMarkerClick(Marker box){
-        if(checkIfBoxIsInRange(box, locationPlugin.getLastKnownLocation())) {
+    private boolean handleBoxMarkerClick(Marker box) {
+        if (checkIfBoxIsInRange(box, locationPlugin.getLastKnownLocation())) {
             Intent openBox = new Intent(this.getActivity(), OpenBoxActivity.class);
             Chest chest = getChest(box);
             Toast.makeText(getContext(),"chest #"+chest.getId(), Toast.LENGTH_LONG).show();
@@ -214,6 +219,7 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
         return false;
     }
 
+<<<<<<< HEAD
     private Chest getChest(Marker box){
         LatLng position = box.getPosition();
         for(Chest c: chests){
@@ -226,6 +232,9 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
     }
 
     private boolean checkIfBoxIsInRange(Marker box, Location userLocation){
+=======
+    private boolean checkIfBoxIsInRange(Marker box, Location userLocation) {
+>>>>>>> 55fa1de75e6e85dadc221ea69169476afcc21181
         double boxLatitude = box.getPosition().getLatitude();
         double boxLongitude = box.getPosition().getLongitude();
         double userLatitude = userLocation.getLatitude();
@@ -237,7 +246,7 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
         return checkedLatitude && checkedLongitude;
     }
 
-    private void handleHomeMarkerClick(Marker home){
+    private void handleHomeMarkerClick(Marker home) {
 
     }
 
@@ -342,5 +351,26 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
         super.onStop();
     }
 
+//    // Container Activity must implement this interface
+//    public interface OnResetHomeListener {
+//        public void resetHome(int position);
+//    }
+//
+//    @Override
+//    public void onAttach(Context context) {
+//        super.onAttach(context);
+//        if (context instanceof OnResetHomeListener) {
+//            mListener = (OnResetHomeListener) context;
+//        } else {
+//            throw new RuntimeException(context.toString()
+//                    + " must implement OnFragmentInteractionListener");
+//        }
+//    }
+//
+//    @Override
+//    public void onDetach() {
+//        super.onDetach();
+//        mListener = null;
+//    }
 
 }
