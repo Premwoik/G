@@ -7,6 +7,7 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
  */
 
 public class Chest {
+    private long id;
     private double longitude;
     private double latitude;
     private boolean opened;
@@ -15,6 +16,14 @@ public class Chest {
         this.longitude = longitude;
         this.latitude = latitude;
         this.opened = opened;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public double getLongitude() {

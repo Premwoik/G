@@ -84,7 +84,7 @@ public class MyRankingRecyclerViewAdapter extends RecyclerView.Adapter<MyRanking
         }
 
         public void setReward(final int position){
-            Resources res = this.itemView.getContext().getResources();
+            Resources res = this.itemView.getResources();
             switch(position){
                 case 0: mReward.setImageDrawable(res.getDrawable(R.drawable.gold_medal)); break;
                 case 1: mReward.setImageDrawable(res.getDrawable(R.drawable.silver_medal)); break;

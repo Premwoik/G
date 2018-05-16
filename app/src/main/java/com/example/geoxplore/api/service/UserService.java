@@ -18,6 +18,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 public interface UserService {
 
@@ -33,7 +34,7 @@ public interface UserService {
     @POST("/user/set-home")
     Observable<Response<Void>> setHome(@Header("Authorization") String token, @Body HomeCords cords);
 
-    @GET("/user/gethome")
+    @GET("/user/get-home")
     Observable<HomeCords> getHome(@Header("Authorization") String token);
 
     @GET("/user/chests")
@@ -41,6 +42,9 @@ public interface UserService {
 
     @GET("/community/ranking")
     Observable<List<UserStatsRanking>> getRanking(@Header("Authorization") String token);
+
+    @GET("/user/open-chest/{id}")
+    Observable<Response<Void>> openChest(@Header("Authorization") String token, @Path("id") long id);
 
 
     //ONLY FOR TESTS

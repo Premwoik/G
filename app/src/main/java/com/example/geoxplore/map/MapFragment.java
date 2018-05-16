@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.geoxplore.MainActivity;
+import com.example.geoxplore.MyRankingRecyclerViewAdapter;
 import com.example.geoxplore.OpenBoxActivity;
 import com.example.geoxplore.R;
 import com.example.geoxplore.api.ApiUtils;
@@ -42,6 +43,7 @@ import com.mapbox.services.android.telemetry.location.LocationEngineProvider;
 import com.mapbox.services.android.telemetry.permissions.PermissionsListener;
 import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -62,6 +64,7 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
 
     private IconFactory iconFactory;
     private Icon icon_home, icon_box;
+    private List<Chest> chests;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -166,6 +169,7 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(data -> {
                     Toast.makeText(getContext(), "Boxes loaded", Toast.LENGTH_SHORT).show();
+                    chests = new ArrayList<>(data);
                     for (Chest chest : data) {
                         mapboxMap.addMarker(new MarkerOptions().setPosition(chest.getLang()).icon(icon_box));
                     }
@@ -187,13 +191,38 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
     private boolean handleBoxMarkerClick(Marker box){
         if(checkIfBoxIsInRange(box, locationPlugin.getLastKnownLocation())) {
             Intent openBox = new Intent(this.getActivity(), OpenBoxActivity.class);
-            startActivity(openBox);
-            //TODO sprawdzić, czy skrzynka została poprawnie otworzona i zostało to wysłane do serwera
-            box.remove();
+            Chest chest = getChest(box);
+            Toast.makeText(getContext(),"chest #"+chest.getId(), Toast.LENGTH_LONG).show();
+            ApiUtils
+                    .getService(UserService.class)
+                    .openChest(getArguments().getString(Intent.EXTRA_USER), chest.getId())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(x -> {System.out.print(x.code());
+                        if(x.code()==200){
+
+                            startActivity(openBox);
+                            box.remove();
+                        }else {
+                            Toast.makeText(getContext(),"Nie udało się otwarcie "+x.errorBody().string(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+
             return true;
         }
         Toast.makeText(getContext(), "You are too far from box.", Toast.LENGTH_SHORT).show();
         return false;
+    }
+
+    private Chest getChest(Marker box){
+        LatLng position = box.getPosition();
+        for(Chest c: chests){
+            if(c.getLang().getLatitude()==position.getLatitude() && c.getLang().getLongitude()==position.getLongitude()){
+                return c;
+            }
+            Toast.makeText(getContext(),"skrzynia: "+c.getId() + c.getLang(), Toast.LENGTH_LONG).show();
+        }
+        return null;
     }
 
     private boolean checkIfBoxIsInRange(Marker box, Location userLocation){
