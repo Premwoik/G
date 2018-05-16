@@ -8,7 +8,9 @@ import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -89,6 +91,9 @@ public class OpenBoxActivity extends AppCompatActivity {
         }
     };
 
+    @BindView(R.id.open_box_activity_text)
+    TextView exp_text;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,6 +103,15 @@ public class OpenBoxActivity extends AppCompatActivity {
         mVisible = true;
         mControlsView = findViewById(R.id.fullscreen_content_controls);
         mContentView = findViewById(R.id.fullscreen_content);
+
+        try{
+            Bundle b = getIntent().getExtras();
+            int exp = b.getInt("EXP");
+            exp_text.setText("Otrzymano " + exp + " punktów doświadczenia.");
+        }catch (NullPointerException ex){
+            //NO NIC
+        }
+
 
 
         // Set up the user interaction to manually show or hide the system UI.

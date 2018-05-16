@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +23,7 @@ import com.example.geoxplore.R;
 import com.example.geoxplore.api.ApiUtils;
 import com.example.geoxplore.api.model.Chest;
 import com.example.geoxplore.api.model.HomeCords;
+import com.example.geoxplore.api.model.OpenBoxResponseData;
 import com.example.geoxplore.api.service.UserService;
 import com.mapbox.androidsdk.plugins.building.BuildingPlugin;
 import com.mapbox.mapboxsdk.annotations.Icon;
@@ -165,6 +168,7 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void loadBoxes() {
         ApiUtils
                 .getService(UserService.class)
@@ -172,11 +176,16 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(data -> {
-                    Toast.makeText(getContext(), "Boxes loaded", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), "Boxes loaded", Toast.LENGTH_SHORT).show();
                     chests = new ArrayList<>(data);
-                    for (Chest chest : data) {
-                        mapboxMap.addMarker(new MarkerOptions().setPosition(chest.getLang()).icon(icon_box));
-                    }
+                    data.stream()
+                            .filter(box -> !box.isOpened())
+                            .forEach(box ->mapboxMap
+                                    .addMarker(new MarkerOptions().setPosition(box.getLang()).icon(icon_box)));
+
+//                    for (Chest chest : data) {
+//                        mapboxMap.addMarker(new MarkerOptions().setPosition(chest.getLang()).icon(icon_box));
+//                    }
 
                 });
 
@@ -196,40 +205,41 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
         if (checkIfBoxIsInRange(box, locationPlugin.getLastKnownLocation())) {
             Intent openBox = new Intent(this.getActivity(), OpenBoxActivity.class);
             Chest chest = getChest(box);
-            Toast.makeText(getContext(),"chest #"+chest.getId(), Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "chest #" + chest.getId(), Toast.LENGTH_LONG).show();
             ApiUtils
                     .getService(UserService.class)
                     .openChest(getArguments().getString(Intent.EXTRA_USER), chest.getId())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(x -> {System.out.print(x.code());
-                        if(x.code()==200){
-
+                    .onErrorReturn(x -> new OpenBoxResponseData(-1))
+                    .subscribe(x -> {
+                        if (x.isValid()) {
+                            openBox.putExtra("EXP", x.getExpGained());
                             startActivity(openBox);
-                            box.remove();
-                        }else {
-                            Toast.makeText(getContext(),"Nie udało się otwarcie "+x.errorBody().string(), Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getContext(), "Nie można otworzyć skrzynki", Toast.LENGTH_SHORT).show();
                         }
                     });
 
             return true;
         }
-        Toast.makeText(getContext(), "You are too far from box.", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getContext(), "You are too far from box.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Podejdź bliżej!", Toast.LENGTH_SHORT).show();
         return false;
     }
 
 
-    private Chest getChest(Marker box){
+    private Chest getChest(Marker box) {
         LatLng position = box.getPosition();
-        for(Chest c: chests){
-            if(c.getLang().getLatitude()==position.getLatitude() && c.getLang().getLongitude()==position.getLongitude()){
+        for (Chest c : chests) {
+            if (c.getLang().getLatitude() == position.getLatitude() && c.getLang().getLongitude() == position.getLongitude()) {
                 return c;
             }
-            Toast.makeText(getContext(),"skrzynia: "+c.getId() + c.getLang(), Toast.LENGTH_LONG).show();
+//            Toast.makeText(getContext(), "skrzynia: " + c.getId() + c.getLang(), Toast.LENGTH_LONG).show();
         }
         return null;
     }
-    
+
 
     private boolean checkIfBoxIsInRange(Marker box, Location userLocation) {
 

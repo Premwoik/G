@@ -2,6 +2,7 @@ package com.example.geoxplore.api.service;
 
 import com.example.geoxplore.api.model.Chest;
 import com.example.geoxplore.api.model.HomeCords;
+import com.example.geoxplore.api.model.OpenBoxResponseData;
 import com.example.geoxplore.api.model.SecurityToken;
 import com.example.geoxplore.api.model.UserCredentials;
 import com.example.geoxplore.api.model.UserRegistrationForm;
@@ -43,8 +44,8 @@ public interface UserService {
     @GET("/community/ranking")
     Observable<List<UserStatsRanking>> getRanking(@Header("Authorization") String token);
 
-    @GET("/user/open-chest/{id}")
-    Observable<Response<Void>> openChest(@Header("Authorization") String token, @Path("id") long id);
+    @POST("/user/open-chest/{id}")
+    Observable<OpenBoxResponseData> openChest(@Header("Authorization") String token, @Path("id") long id);
 
 
     //ONLY FOR TESTS
