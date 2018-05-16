@@ -112,6 +112,7 @@ public class LoginActivity extends AppCompatActivity {
                 intent.putExtra(Intent.EXTRA_USER, token);
                 startActivity(intent);
                 loadingBar.setVisibility(View.INVISIBLE);
+
             }
         }
 

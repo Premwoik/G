@@ -31,7 +31,7 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="open_box">Open box</string>
     <string name="back">Back</string>
-    <string name="open_box_loot">No nie wiem, tutaj jakiś loot?</string>
+    <string name="open_box_loot">Skrzynka została otworzona!</string>
     <string name="title_activity_settings">Settings</string>
 
     <!-- Strings related to Settings -->
