@@ -182,7 +182,7 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
                             .filter(box -> !box.isOpened())
                             .forEach(box ->mapboxMap
                                     .addMarker(new MarkerOptions().setPosition(box.getLang()).icon(icon_box)));
-
+                        //TODO tutaj albo nie pokazujemy, albo pokazujemy je jako otwarte bez możliwości ponownego otwarcia
 //                    for (Chest chest : data) {
 //                        mapboxMap.addMarker(new MarkerOptions().setPosition(chest.getLang()).icon(icon_box));
 //                    }
