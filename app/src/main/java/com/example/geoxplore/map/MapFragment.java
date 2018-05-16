@@ -12,11 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-<<<<<<< HEAD
+
 import com.example.geoxplore.MainActivity;
 import com.example.geoxplore.MyRankingRecyclerViewAdapter;
-=======
->>>>>>> 55fa1de75e6e85dadc221ea69169476afcc21181
+
 import com.example.geoxplore.OpenBoxActivity;
 import com.example.geoxplore.R;
 import com.example.geoxplore.api.ApiUtils;
@@ -219,7 +218,7 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
         return false;
     }
 
-<<<<<<< HEAD
+
     private Chest getChest(Marker box){
         LatLng position = box.getPosition();
         for(Chest c: chests){
@@ -230,11 +229,10 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
         }
         return null;
     }
+    
 
-    private boolean checkIfBoxIsInRange(Marker box, Location userLocation){
-=======
     private boolean checkIfBoxIsInRange(Marker box, Location userLocation) {
->>>>>>> 55fa1de75e6e85dadc221ea69169476afcc21181
+
         double boxLatitude = box.getPosition().getLatitude();
         double boxLongitude = box.getPosition().getLongitude();
         double userLatitude = userLocation.getLatitude();
