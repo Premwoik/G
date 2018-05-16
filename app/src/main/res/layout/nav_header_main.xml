@@ -21,20 +21,19 @@
         android:layout_gravity="center_horizontal"
         android:clickable="true"
         android:focusable="true"
-        android:src="@drawable/avatar"
+        android:src="@drawable/user"
         app:civ_border_color="@color/exp_bar_progress"
         app:civ_border_width="3dp" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="NICK"
+        android:id="@+id/nav_header_username"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="level x" />
+    <!--<TextView-->
+        <!--android:id="@+id/nav_header_level"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"/>-->
 
 </LinearLayout>

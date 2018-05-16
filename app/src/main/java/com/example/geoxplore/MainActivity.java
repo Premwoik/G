@@ -1,5 +1,6 @@
 package com.example.geoxplore;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,11 +16,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.geoxplore.map.MapFragment;
 import com.example.geoxplore.utils.SavedData;
 import com.mapbox.mapboxsdk.Mapbox;
+
+import org.w3c.dom.Text;
 
 import java.util.Objects;
 
@@ -31,6 +35,7 @@ public class MainActivity extends AppCompatActivity
 
     Bundle fragmentBundle;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +66,11 @@ public class MainActivity extends AppCompatActivity
                     loadFragment(fragment, UserProfileFragment.TAG);
                     drawer.closeDrawer(GravityCompat.START);
                 });
+        TextView navHeaderUsername = headerlayout.findViewById(R.id.nav_header_username);
+        navHeaderUsername.setText("nick: " + SavedData.getLoggedUserCredentials(getApplicationContext()).getUsername());
+
+//        TextView navHeaderLvl = headerlayout.findViewById(R.id.nav_header_level);
+//        navHeaderLvl.setText("level: " + SavedData.getUserLevel(getApplicationContext()));
 
         //set main fragment
         MapFragment fragment = new MapFragment();
@@ -96,6 +106,11 @@ public class MainActivity extends AppCompatActivity
                 MapFragment fragment = new MapFragment();
                 fragment.setArguments(fragmentBundle);
                 loadFragment(fragment, MapFragment.TAG);
+                break;
+            case R.id.nav_profile:
+                Fragment fragment3= new UserProfileFragment();
+                fragment3.setArguments(fragmentBundle);
+                loadFragment(fragment3, UserProfileFragment.TAG);
                 break;
             case R.id.nav_ranking:
                 RankingFragment fragment1 = new RankingFragment();
@@ -137,5 +152,8 @@ public class MainActivity extends AppCompatActivity
         mHandler.postDelayed(pendingRunnable, 250);
         CURRENT_TAG = tag;
     }
+
+
+
 
 }

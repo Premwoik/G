@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.example.geoxplore.api.ApiUtils;
 import com.example.geoxplore.api.model.UserStatistics;
 import com.example.geoxplore.api.service.UserService;
+import com.example.geoxplore.utils.SavedData;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -86,6 +87,7 @@ public class UserProfileFragment extends Fragment {
                     mBoxesText.setText(String.valueOf(userStatistics.getOpenedChests()));
                     mUserNameText.setText(userStatistics.getUsername());
                     mUserPercentToNextLvlText.setText((int) userStatistics.getToNextLevel() + "% to next");
+                    SavedData.saveUserLevel(getContext(), userStatistics.getLevel());
                 });
     }
 
@@ -95,7 +97,7 @@ public class UserProfileFragment extends Fragment {
         mUserPtsText.setText(ss1);
         mFriendsText.setText("23");
         mBadgesText.setText("12");
-        mUserImage.setImageResource(R.drawable.avatar);
+        mUserImage.setImageResource(R.drawable.user);
         mExpProgressBar.setMax(100);
 
         mUserPercentToNextLvlText.setTypeface(null, Typeface.BOLD);

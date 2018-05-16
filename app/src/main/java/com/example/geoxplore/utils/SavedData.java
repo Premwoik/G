@@ -16,6 +16,7 @@ public final class SavedData {
     private static final String USR_HOME_LONGITUDE = "usr_home_longitude";
     private static final String USR_PASSWORD = "usr_pwd";
     private static final String USR_USERNAME = "usr_log";
+    private static final String USR_LEVEL = "usr_lvl";
 
     private static SharedPreferences getPreferences(Context ctx) {
         return PreferenceManager.getDefaultSharedPreferences(ctx);
@@ -49,12 +50,25 @@ public final class SavedData {
         editor.apply();
     }
 
+     public static String getUserLevel (Context ctx){
+         return getPreferences(ctx).getString(USR_LEVEL, "unknown");
+    }
+
+    public static void saveUserLevel (Context ctx, int level){
+        SharedPreferences.Editor editor = getPreferences(ctx).edit();
+        editor.putString(USR_LEVEL, String.valueOf(level));
+        editor.apply();
+    }
+
+
+
     public static void clear(Context ctx){
         SharedPreferences.Editor editor = getPreferences(ctx).edit();
         editor.remove(USR_HOME_LONGITUDE);
         editor.remove(USR_HOME_LATITUDE);
         editor.remove(USR_PASSWORD);
         editor.remove(USR_USERNAME);
+        editor.remove(USR_LEVEL);
         editor.apply();
     }
 }
