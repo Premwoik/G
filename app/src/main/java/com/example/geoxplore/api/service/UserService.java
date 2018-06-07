@@ -1,5 +1,6 @@
 package com.example.geoxplore.api.service;
 
+import com.example.geoxplore.api.model.Avatar;
 import com.example.geoxplore.api.model.Chest;
 import com.example.geoxplore.api.model.HomeCords;
 import com.example.geoxplore.api.model.OpenBoxResponseData;
@@ -31,6 +32,12 @@ public interface UserService {
 
     @GET("/user/my-statistics")
     Observable<UserStatistics> getUserStats(@Header("Authorization") String token);
+
+    @GET("/community/avatar/{username}")
+    Observable<Avatar> getAvatar(@Header("Authorization") String token, @Path("username") String username);
+
+    @POST("/user/avatar")
+    Observable<Response<Void>> setAvatar(@Header("Authorization") String token, @Body Avatar avatar);
 
     @POST("/user/set-home")
     Observable<Response<Void>> setHome(@Header("Authorization") String token, @Body HomeCords cords);
