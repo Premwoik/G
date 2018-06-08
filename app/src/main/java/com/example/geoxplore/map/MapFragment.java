@@ -9,9 +9,15 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.constraint.ConstraintLayout;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -58,13 +64,14 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
     public static final String TAG = "map_fragment";
     public static final String RESET_HOME = "reset_home";
 
-    private BuildingPlugin buildingPlugin;
+//    private BuildingPlugin buildingPlugin;
     private MapView mapView;
     private PermissionsManager permissionsManager;
     private LocationLayerPlugin locationPlugin;
     private LocationEngine locationEngine;
     private MapboxMap mapboxMap;
     private final String HOME_MARKER_TITLE = "My Home";
+    private LinearLayout textLayout;
 
     private IconFactory iconFactory;
     private Icon icon_home, icon_box;
@@ -81,8 +88,14 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
         // Inflate the layout for this fragment
         View view = super.onCreateView(inflater, container, savedInstanceState);
         mapView = (MapView) view;
+        RelativeLayout v = new RelativeLayout(getContext());
+        textLayout = new LinearLayout(getContext());
+        v.addView(mapView);
+        v.addView(textLayout);
+
+
 //        View view = inflater.inflate(R.layout.fragment_map, container, false);
-        return view;
+        return v;
     }
 
     @Override
@@ -146,7 +159,7 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
     }
 
     private void chooseNewUserHome() {
-        Toast.makeText(getContext(), "Kliknij na mapę, aby ustawić dom", Toast.LENGTH_SHORT).show();
+        setHomeTextLayout();
         mapboxMap.addOnMapClickListener(new MapboxMap.OnMapClickListener() {
             @Override
             public void onMapClick(@NonNull LatLng point) {
@@ -158,7 +171,7 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
                             if (voidResponse.code() == 200) {
                                 mapboxMap.removeOnMapClickListener(this);
                                 mapboxMap.addMarker(new MarkerOptions().setPosition(point).title(HOME_MARKER_TITLE).icon(icon_home));
-                                Toast.makeText(getContext(), R.string.map_home_set_msg, Toast.LENGTH_SHORT).show();
+                                textLayout.removeAllViews();
                                 loadBoxes();
                             } else {
                                 onMapClick(point);
@@ -167,6 +180,19 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
                         });
             }
         });
+    }
+
+    private void setHomeTextLayout(){
+        TextView b = new TextView(getContext());
+        b.setText("CLICK ON THE MAP TO SET HOME POSITION");
+        b.setTextSize(30);
+        b.setPadding(0,20,0,20);
+        b.setGravity(Gravity.CENTER);
+        b.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        b.setLayoutParams(params);
+        textLayout.addView(b);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
