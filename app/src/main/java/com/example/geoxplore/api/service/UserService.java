@@ -55,6 +55,8 @@ public interface UserService {
     Observable<OpenBoxResponseData> openChest(@Header("Authorization") String token, @Path("id") long id);
 
 
+
+
     //ONLY FOR TESTS
     @GET("/user-management/list-users")
     Observable<ResponseBody> getUsers(@Header("Authorization") String token);

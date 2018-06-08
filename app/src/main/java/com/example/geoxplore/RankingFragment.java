@@ -65,7 +65,7 @@ public class RankingFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_ranking_list, container, false);
         List<UserStatsRanking> userStatsRankingList = new LinkedList<UserStatsRanking>();
-        userStatsRankingList.add(new UserStatsRanking("error", 0, 0));
+        userStatsRankingList.add(new UserStatsRanking("error", 0, 0, 0));
 
         // Set the adapter
         if (view instanceof RecyclerView) {

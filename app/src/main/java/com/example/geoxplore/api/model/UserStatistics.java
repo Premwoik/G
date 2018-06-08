@@ -9,14 +9,16 @@ public class UserStatistics {
     private int experience;
     private int level;
     private double toNextLevel;
-    private int openedChests;
+    private int friends;
+    private ChestStats chestStats;
 
-    public UserStatistics(String username, int experience, int level, double toNextLevel, int openedChests) {
+    public UserStatistics(String username, int experience, int level, double toNextLevel, int friends, ChestStats chestStats) {
         this.username = username;
         this.experience = experience;
         this.level = level;
         this.toNextLevel = toNextLevel;
-        this.openedChests = openedChests;
+        this.friends = friends;
+        this.chestStats = chestStats;
     }
 
     public String getUsername() {
@@ -51,11 +53,19 @@ public class UserStatistics {
         this.toNextLevel = toNextLevel;
     }
 
-    public int getOpenedChests() {
-        return openedChests;
+    public int getFriends() {
+        return friends;
     }
 
-    public void setOpenedChests(int openedChests) {
-        this.openedChests = openedChests;
+    public void setFriends(int friends) {
+        this.friends = friends;
+    }
+
+    public ChestStats getChestStats() {
+        return chestStats;
+    }
+
+    public void setChestStats(ChestStats chestStats) {
+        this.chestStats = chestStats;
     }
 }

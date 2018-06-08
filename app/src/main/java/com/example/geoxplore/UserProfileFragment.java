@@ -100,11 +100,11 @@ public class UserProfileFragment extends Fragment {
                 .getUserStats(getArguments().getString(Intent.EXTRA_USER))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .onErrorReturn(x-> new UserStatistics("error",0,0,0,0))
+//                .onErrorReturn(x-> new UserStatistics("error",0,0,0,0))
                 .subscribe(userStatistics -> {
                     mExpProgressBar.setProgress(100 - (int) userStatistics.getToNextLevel());
                     mUserLvlText.setText("level " + userStatistics.getLevel());
-                    mBoxesText.setText(String.valueOf(userStatistics.getOpenedChests()));
+                    mBoxesText.setText(String.valueOf(userStatistics.getChestStats().getOpenedOverallChests()));
                     mUserNameText.setText(userStatistics.getUsername());
                     mUserPercentToNextLvlText.setText((int) userStatistics.getToNextLevel() + "% to next");
                     SavedData.saveUserLevel(getContext(), userStatistics.getLevel());

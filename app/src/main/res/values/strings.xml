@@ -23,7 +23,7 @@
     <string name="gained"><b>gained</b></string>
     <string name="user_location_permission_not_granted">user location permission not granted</string>
     <string name="click_on_box">OTWIERAM SKRZYNIE</string>
-    <string name="map_home_set_msg">Ustawiono dom!</string>
+    <string name="map_home_set_msg">Saved home position!</string>
     <string name="title_activity_main2">Main2Activity</string>
 
     <string name="title_activity_fullscreen">FullscreenActivity</string>
