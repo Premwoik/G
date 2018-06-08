@@ -76,11 +76,9 @@ public class MainActivity extends AppCompatActivity
                 .observeOn(AndroidSchedulers.mainThread())
                 .onErrorReturn(x->{
                     Toast.makeText(this.getApplicationContext(), x.getMessage(), Toast.LENGTH_LONG).show();
-
                     return null;
                 })
                 .subscribe(bodyResponse -> {
-
                     Toast.makeText(getApplicationContext(), String.valueOf(bodyResponse.code()), Toast.LENGTH_LONG).show();
                     if(bodyResponse.isSuccessful()){
                         if(bodyResponse.body()!=null){
@@ -88,11 +86,7 @@ public class MainActivity extends AppCompatActivity
                             Bitmap bm = BitmapFactory.decodeStream(bodyResponse.body().byteStream());
                             circleImageView.setImageBitmap(bm);
                         }
-
                     }
-
-
-
                 });
         headerlayout.findViewById(R.id.nav_header_image).
                 setOnClickListener(listener -> {

@@ -11,11 +11,13 @@ public class Chest {
     private double longitude;
     private double latitude;
     private boolean opened;
+    private long value;
 
-    public Chest(double longitude, double latitude, boolean opened) {
+    public Chest(double longitude, double latitude, boolean opened, long value) {
         this.longitude = longitude;
         this.latitude = latitude;
         this.opened = opened;
+        this.value = value;
     }
 
     public long getId() {
@@ -53,4 +55,8 @@ public class Chest {
     public void setOpened(boolean opened) {
         this.opened = opened;
     }
+
+    public long getValue() {return value;}
+
+    public void setValue(long value) {this.value = value;}
 }

@@ -74,7 +74,7 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
     private LinearLayout textLayout;
 
     private IconFactory iconFactory;
-    private Icon icon_home, icon_box;
+    private Icon icon_home, icon_box, icon_open_box;
     private List<Chest> chests;
 
     @Override
@@ -126,9 +126,11 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
 
         Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.home2);
         Bitmap bm2 = BitmapFactory.decodeResource(getResources(), R.drawable.box2);
+        Bitmap bm3 = BitmapFactory.decodeResource(getResources(), R.drawable.open_box);
         iconFactory = IconFactory.getInstance(this.getContext());
         icon_home = iconFactory.fromBitmap(bm);
         icon_box = iconFactory.fromBitmap(bm2);
+        icon_open_box = iconFactory.fromBitmap(bm3);
     }
 
     private void addHomeMarkerAndLoadBoxes() {
@@ -206,16 +208,14 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
 //                    Toast.makeText(getContext(), "Boxes loaded", Toast.LENGTH_SHORT).show();
                     chests = new ArrayList<>(data);
                     data.stream()
-                            .filter(box -> !box.isOpened())
-                            .forEach(box ->mapboxMap
-                                    .addMarker(new MarkerOptions().setPosition(box.getLang()).icon(icon_box)));
-                        //TODO tutaj albo nie pokazujemy, albo pokazujemy je jako otwarte bez możliwości ponownego otwarcia
-//                    for (Chest chest : data) {
-//                        mapboxMap.addMarker(new MarkerOptions().setPosition(chest.getLang()).icon(icon_box));
-//                    }
-
+                            .forEach(box -> {
+                                if (box.isOpened()) {
+                                    mapboxMap.addMarker(new MarkerOptions().setPosition(box.getLang()).icon(icon_open_box));
+                                } else {
+                                    mapboxMap.addMarker(new MarkerOptions().setPosition(box.getLang()).icon(icon_box));
+                                }
+                            });
                 });
-
     }
 
     private void setOnMarkerClickListener() {
@@ -241,12 +241,12 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
                     .subscribe(x -> {
                         if (x.isValid()) {
                             openBox.putExtra("EXP", x.getExpGained());
+                            openBox.putExtra("VALUE", chest.getValue());
                             startActivity(openBox);
                         } else {
                             Toast.makeText(getContext(), "Nie można otworzyć skrzynki", Toast.LENGTH_SHORT).show();
                         }
                     });
-
             return true;
         }
 //        Toast.makeText(getContext(), "You are too far from box.", Toast.LENGTH_SHORT).show();

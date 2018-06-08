@@ -106,6 +106,15 @@ public class OpenBoxActivity extends AppCompatActivity {
 
         try{
             Bundle b = getIntent().getExtras();
+            int value = b.getInt("VALUE");
+            TextView tv = (TextView) mContentView;
+            switch(value){
+                case 1: tv.setTextColor(8551300); break;
+                case 2: tv.setTextColor(1517537); break;
+                case 3: tv.setTextColor(12136352); break;
+                case 4: tv.setTextColor(13867813); break;
+                default: tv.setTextColor(8551300);
+            }
             int exp = b.getInt("EXP");
             exp_text.setText("Otrzymano " + exp + " punktów doświadczenia.");
         }catch (NullPointerException ex){
