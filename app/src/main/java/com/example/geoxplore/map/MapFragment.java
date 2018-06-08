@@ -113,7 +113,7 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
 
         Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.home2);
         Bitmap bm2 = BitmapFactory.decodeResource(getResources(), R.drawable.box2);
-        Bitmap bm3 = BitmapFactory.decodeResource(getResources(), R.drawable.open_box);
+        Bitmap bm3 = BitmapFactory.decodeResource(getResources(), R.drawable.small_open_box);
         iconFactory = IconFactory.getInstance(this.getContext());
         icon_home = iconFactory.fromBitmap(bm);
         icon_box = iconFactory.fromBitmap(bm2);
@@ -181,14 +181,13 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
                 .subscribe(data -> {
 //                    Toast.makeText(getContext(), "Boxes loaded", Toast.LENGTH_SHORT).show();
                     chests = new ArrayList<>(data);
-                    data.stream()
-                            .forEach(box -> {
-                                if (box.isOpened()) {
-                                    mapboxMap.addMarker(new MarkerOptions().setPosition(box.getLang()).icon(icon_open_box));
-                                } else {
-                                    mapboxMap.addMarker(new MarkerOptions().setPosition(box.getLang()).icon(icon_box));
-                                }
-                            });
+                    for(Chest box: data){
+                        if (box.isOpened()) {
+                            mapboxMap.addMarker(new MarkerOptions().setPosition(box.getLang()).icon(icon_open_box));
+                        } else {
+                            mapboxMap.addMarker(new MarkerOptions().setPosition(box.getLang()).icon(icon_box));
+                        }
+                    }
                 });
     }
 
@@ -206,21 +205,25 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
         if (checkIfBoxIsInRange(box, locationPlugin.getLastKnownLocation())) {
             Intent openBox = new Intent(this.getActivity(), OpenBoxActivity.class);
             Chest chest = getChest(box);
-            ApiUtils
-                    .getService(UserService.class)
-                    .openChest(getArguments().getString(Intent.EXTRA_USER), chest.getId())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .onErrorReturn(x -> new OpenBoxResponseData(-1))
-                    .subscribe(x -> {
-                        if (x.isValid()) {
-                            openBox.putExtra("EXP", x.getExpGained());
-                            openBox.putExtra("VALUE", chest.getValue());
-                            startActivity(openBox);
-                        } else {
-                            Toast.makeText(getContext(), "Nie można otworzyć skrzynki", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+            if(!chest.isOpened()) {
+                ApiUtils
+                        .getService(UserService.class)
+                        .openChest(getArguments().getString(Intent.EXTRA_USER), chest.getId())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .onErrorReturn(x -> new OpenBoxResponseData(-1))
+                        .subscribe(x -> {
+                            if (x.isValid()) {
+                                openBox.putExtra("EXP", x.getExpGained());
+                                openBox.putExtra("VALUE", chest.getValue());
+                                startActivity(openBox);
+                            } else {
+                                Toast.makeText(getContext(), "Nie można otworzyć skrzynki", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            }else {
+                Toast.makeText(getContext(), "You've already opened that chest!", Toast.LENGTH_LONG).show();
+            }
             return true;
         }
 //        Toast.makeText(getContext(), "You are too far from box.", Toast.LENGTH_SHORT).show();
