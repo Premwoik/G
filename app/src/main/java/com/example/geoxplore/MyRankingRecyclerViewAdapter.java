@@ -1,6 +1,9 @@
 package com.example.geoxplore;
 
+import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +12,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.geoxplore.api.ApiUtils;
 import com.example.geoxplore.api.model.UserStatsRanking;
+import com.example.geoxplore.api.service.UserService;
 
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 
 ///**
@@ -22,11 +31,12 @@ public class MyRankingRecyclerViewAdapter extends RecyclerView.Adapter<MyRanking
 
     //private final List<DummyContent.DummyItem> mValues;
     private List<UserStatsRanking> usersStats;
+    private String user;
 //    private final OnListFragmentInteractionListener mListener;
 
-    public MyRankingRecyclerViewAdapter(List<UserStatsRanking> items) {
+    public MyRankingRecyclerViewAdapter(List<UserStatsRanking> items, String user) {
         usersStats = items;
-//        mListener = listener;
+        this.user = user;
     }
 
     @Override
@@ -48,6 +58,25 @@ public class MyRankingRecyclerViewAdapter extends RecyclerView.Adapter<MyRanking
         holder.mLevel.setText(String.valueOf(level));
         holder.mOpenedChest.setText(String.valueOf(openedChests));
         holder.setReward(position);
+
+        ApiUtils
+                .getService(UserService.class)
+                .getUserAvatar(user, username)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .onErrorReturn(x->{
+                    Toast.makeText(holder.itemView.getContext(), x.getMessage(), Toast.LENGTH_LONG).show();
+                    return null;
+                })
+                .subscribe(bodyResponse -> {
+                    if(bodyResponse.isSuccessful()){
+                        if(bodyResponse.body()!=null){
+                            Bitmap bm = BitmapFactory.decodeStream(bodyResponse.body().byteStream());
+                            holder.mAvatar.setImageBitmap(bm);
+                        }
+
+                    }
+                });
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,6 +100,8 @@ public class MyRankingRecyclerViewAdapter extends RecyclerView.Adapter<MyRanking
         public final View mView;
         public final TextView mRank, mName, mLevel, mOpenedChest;
         public final ImageView mReward;
+        public final CircleImageView  mAvatar;
+
 
 
         public ViewHolder(View view) {
@@ -81,6 +112,7 @@ public class MyRankingRecyclerViewAdapter extends RecyclerView.Adapter<MyRanking
             mLevel = (TextView) view.findViewById(R.id.tv_level);
             mOpenedChest = (TextView) view.findViewById(R.id.tv_opened_chest);
             mReward = (ImageView) view.findViewById(R.id.iv_reward);
+            mAvatar = (CircleImageView) view.findViewById(R.id.user_image);
         }
 
         public void setReward(final int position){

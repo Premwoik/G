@@ -139,6 +139,7 @@ public class UserProfileFragment extends Fragment {
                     Toast.makeText(getContext(), String.valueOf(bodyResponse.code()), Toast.LENGTH_LONG).show();
                     if(bodyResponse.isSuccessful()){
                         if(bodyResponse.body()!=null){
+
                             Bitmap bm = BitmapFactory.decodeStream(bodyResponse.body().byteStream());
                             mUserImage.setImageBitmap(bm);
                         }
@@ -182,7 +183,7 @@ public class UserProfileFragment extends Fragment {
             fos.close();
 
             int file_size = Integer.parseInt(String.valueOf(f.length()/1024));
-            if(file_size<5){
+            if(/*file_size<5*/true){
                 MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", f.getName(), RequestBody.create(MediaType.parse("image/*"), f));
 
                 ApiUtils.getService(UserService.class)

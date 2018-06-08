@@ -2,6 +2,8 @@ package com.example.geoxplore;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,6 +21,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.geoxplore.api.ApiUtils;
+import com.example.geoxplore.api.service.UserService;
 import com.example.geoxplore.map.MapFragment;
 import com.example.geoxplore.utils.SavedData;
 import com.mapbox.mapboxsdk.Mapbox;
@@ -26,6 +30,10 @@ import com.mapbox.mapboxsdk.Mapbox;
 import org.w3c.dom.Text;
 
 import java.util.Objects;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -59,6 +67,33 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         View headerlayout = navigationView.getHeaderView(0);
+
+        CircleImageView circleImageView = (CircleImageView) headerlayout.findViewById(R.id.nav_header_image);
+        ApiUtils
+                .getService(UserService.class)
+                .getAvatar(getIntent().getExtras().getString(Intent.EXTRA_USER))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .onErrorReturn(x->{
+                    Toast.makeText(this.getApplicationContext(), x.getMessage(), Toast.LENGTH_LONG).show();
+
+                    return null;
+                })
+                .subscribe(bodyResponse -> {
+
+                    Toast.makeText(getApplicationContext(), String.valueOf(bodyResponse.code()), Toast.LENGTH_LONG).show();
+                    if(bodyResponse.isSuccessful()){
+                        if(bodyResponse.body()!=null){
+
+                            Bitmap bm = BitmapFactory.decodeStream(bodyResponse.body().byteStream());
+                            circleImageView.setImageBitmap(bm);
+                        }
+
+                    }
+
+
+
+                });
         headerlayout.findViewById(R.id.nav_header_image).
                 setOnClickListener(listener -> {
                     Fragment fragment = new UserProfileFragment();

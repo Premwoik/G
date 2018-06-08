@@ -38,8 +38,9 @@ public interface UserService {
     @GET("/user/my-statistics")
     Observable<UserStatistics> getUserStats(@Header("Authorization") String token);
 
+
     @GET("/community/avatar/{username}")
-    Observable<Avatar> getUserAvatar(@Header("Authorization") String token, @Path("username") String username);
+    Observable<Response<ResponseBody>> getUserAvatar(@Header("Authorization") String token, @Path("username") String username);
 
     @Streaming
     @GET("/user/avatar")

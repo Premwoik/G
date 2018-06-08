@@ -65,6 +65,7 @@ public class RankingFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_ranking_list, container, false);
         List<UserStatsRanking> userStatsRankingList = new LinkedList<UserStatsRanking>();
+
         userStatsRankingList.add(new UserStatsRanking("error", 0, 0, 0));
 
         // Set the adapter
@@ -82,7 +83,9 @@ public class RankingFragment extends Fragment {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .onErrorReturn(x -> userStatsRankingList )
-                    .subscribe(x -> recyclerView.setAdapter(new MyRankingRecyclerViewAdapter(x)));
+                    .subscribe(x ->
+                        recyclerView.setAdapter(new MyRankingRecyclerViewAdapter(x, getArguments().getString(Intent.EXTRA_USER)))
+                    );
             //recyclerView.setAdapter(new MyRankingRecyclerViewAdapter(DummyContent.ITEMS));
         }
         return view;
