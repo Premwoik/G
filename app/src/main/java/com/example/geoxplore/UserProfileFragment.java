@@ -2,8 +2,12 @@ package com.example.geoxplore;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,11 +26,17 @@ import com.example.geoxplore.api.model.UserStatistics;
 import com.example.geoxplore.api.service.UserService;
 import com.example.geoxplore.utils.SavedData;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+
+import static android.app.Activity.RESULT_OK;
 
 //TODO no zrobic, zeby jakos ladniej wygladało TJ usunąć niedziałające pola
 public class UserProfileFragment extends Fragment {
@@ -64,6 +74,15 @@ public class UserProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
         unbinder = ButterKnife.bind(this, view);
+
+        mUserImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                startActivityForResult(photoPickerIntent, 1);
+            }
+        });
         return view;
     }
 
@@ -72,6 +91,7 @@ public class UserProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         initial();
         loadData();
+
     }
 
     @SuppressLint("SetTextI18n")
@@ -90,6 +110,27 @@ public class UserProfileFragment extends Fragment {
                     SavedData.saveUserLevel(getContext(), userStatistics.getLevel());
                 });
     }
+
+
+    @Override
+    public void onActivityResult(int reqCode, int resultCode, Intent data) {
+        super.onActivityResult(reqCode, resultCode, data);
+
+
+        if (resultCode == RESULT_OK) try {
+            final Uri imageUri = data.getData();
+            final InputStream imageStream = getContext().getContentResolver().openInputStream(imageUri);
+            final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+            mUserImage.setImageBitmap(selectedImage);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_LONG).show();
+        }
+        else {
+            Toast.makeText(getContext(), "You haven't picked Image",Toast.LENGTH_LONG).show();
+        }
+    }
+
 
     private void initial(){
         SpannableString ss1=  new SpannableString("38pts");
