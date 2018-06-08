@@ -1,6 +1,7 @@
 package com.example.geoxplore;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -107,16 +108,17 @@ public class OpenBoxActivity extends AppCompatActivity {
         try{
             Bundle b = getIntent().getExtras();
             int value = b.getInt("VALUE");
-            TextView tv = (TextView) mContentView;
-            switch(value){
-                case 1: tv.setTextColor(8551300); break;
-                case 2: tv.setTextColor(1517537); break;
-                case 3: tv.setTextColor(12136352); break;
-                case 4: tv.setTextColor(13867813); break;
-                default: tv.setTextColor(8551300);
-            }
+
+
             int exp = b.getInt("EXP");
             exp_text.setText("Otrzymano " + exp + " punktów doświadczenia.");
+            switch(value){
+                case 1: exp_text.setTextColor(Color.GRAY); break;
+                case 2: exp_text.setTextColor(Color.BLUE); break;
+                case 3: exp_text.setTextColor(Color.YELLOW); break;
+                case 4: exp_text.setTextColor(17170456); break;
+                default: exp_text.setTextColor(Color.BLACK);
+            }
         }catch (NullPointerException ex){
             //NO NIC
         }

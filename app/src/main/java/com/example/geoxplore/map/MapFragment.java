@@ -206,6 +206,9 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
             Intent openBox = new Intent(this.getActivity(), OpenBoxActivity.class);
             Chest chest = getChest(box);
             if(!chest.isOpened()) {
+                LatLng l = box.getPosition();
+                mapboxMap.removeMarker(box);
+                mapboxMap.addMarker(new MarkerOptions().setPosition(l).icon(icon_open_box));
                 ApiUtils
                         .getService(UserService.class)
                         .openChest(getArguments().getString(Intent.EXTRA_USER), chest.getId())
@@ -216,6 +219,7 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
                             if (x.isValid()) {
                                 openBox.putExtra("EXP", x.getExpGained());
                                 openBox.putExtra("VALUE", chest.getValue());
+                                chest.setOpened(true);
                                 startActivity(openBox);
                             } else {
                                 Toast.makeText(getContext(), "Nie można otworzyć skrzynki", Toast.LENGTH_SHORT).show();
