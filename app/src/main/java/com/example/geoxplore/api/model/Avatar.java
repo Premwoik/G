@@ -9,6 +9,10 @@ import java.io.File;
 public class Avatar {
     private File avatar;
 
+    public Avatar(File avatar) {
+        this.avatar = avatar;
+    }
+
     public File getAvatar() {
         return avatar;
     }

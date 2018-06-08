@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.SpannableString;
 import android.text.style.RelativeSizeSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +24,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.geoxplore.api.ApiUtils;
+import com.example.geoxplore.api.model.Avatar;
 import com.example.geoxplore.api.model.UserStatistics;
 import com.example.geoxplore.api.service.UserService;
 import com.example.geoxplore.utils.SavedData;
+import com.mapbox.mapboxsdk.geometry.LatLng;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -34,7 +41,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Response;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -109,26 +121,93 @@ public class UserProfileFragment extends Fragment {
                     mUserPercentToNextLvlText.setText((int) userStatistics.getToNextLevel() + "% to next");
                     SavedData.saveUserLevel(getContext(), userStatistics.getLevel());
                 });
+
+
+
+        ApiUtils
+                .getService(UserService.class)
+                .getAvatar(getArguments().getString(Intent.EXTRA_USER))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .onErrorReturn(x->{
+                    Toast.makeText(getContext(), x.getMessage(), Toast.LENGTH_LONG).show();
+
+                    return null;
+                })
+                .subscribe(bodyResponse -> {
+
+                    Toast.makeText(getContext(), String.valueOf(bodyResponse.code()), Toast.LENGTH_LONG).show();
+                    if(bodyResponse.isSuccessful()){
+                        if(bodyResponse.body()!=null){
+                            Bitmap bm = BitmapFactory.decodeStream(bodyResponse.body().byteStream());
+                            mUserImage.setImageBitmap(bm);
+                        }
+
+                    }
+
+
+
+                });
     }
+
+
 
 
     @Override
     public void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);
 
+        File f = new File(getContext().getCacheDir(), "avatar");
 
         if (resultCode == RESULT_OK) try {
             final Uri imageUri = data.getData();
             final InputStream imageStream = getContext().getContentResolver().openInputStream(imageUri);
             final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
             mUserImage.setImageBitmap(selectedImage);
+
+
+            f.createNewFile();
+
+
+
+//Convert bitmap to byte array
+
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            selectedImage.compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
+            byte[] bitmapdata = bos.toByteArray();
+
+//write the bytes in file
+            FileOutputStream fos = new FileOutputStream(f);
+            fos.write(bitmapdata);
+            fos.flush();
+            fos.close();
+
+            MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", f.getName(), RequestBody.create(MediaType.parse("image/*"), f));
+
+            ApiUtils.getService(UserService.class)
+                    .setAvatar(getArguments().getString(Intent.EXTRA_USER), filePart)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(voidResponse -> {
+                        if (voidResponse.isSuccessful()) {
+                            Toast.makeText(getContext(), "Good", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getContext(), String.valueOf(voidResponse.code()+voidResponse.message()), Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_LONG).show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         else {
             Toast.makeText(getContext(), "You haven't picked Image",Toast.LENGTH_LONG).show();
         }
+
+
     }
 
 
