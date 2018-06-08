@@ -15,9 +15,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 
-import com.example.geoxplore.MainActivity;
-import com.example.geoxplore.MyRankingRecyclerViewAdapter;
-
 import com.example.geoxplore.OpenBoxActivity;
 import com.example.geoxplore.R;
 import com.example.geoxplore.api.ApiUtils;
@@ -37,6 +34,9 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.SupportMapFragment;
 import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerMode;
 import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
+import com.mapbox.mapboxsdk.style.layers.CircleLayer;
+import com.mapbox.mapboxsdk.style.layers.FillLayer;
+import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 import com.mapbox.services.android.telemetry.location.LocationEnginePriority;
@@ -46,6 +46,8 @@ import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.transform.Source;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -94,10 +96,9 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
         super.onMapReady(mapboxMap);
         this.mapboxMap = mapboxMap;
 
-        buildingPlugin = new BuildingPlugin(mapView, mapboxMap);
-        buildingPlugin.setVisibility(true);
+//        buildingPlugin = new BuildingPlugin(mapView, mapboxMap);
+//        buildingPlugin.setVisibility(true);
         enableLocationPlugin();
-
         setInitialParams();
         addHomeMarkerAndLoadBoxes();
         setOnMarkerClickListener();
@@ -205,7 +206,6 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
         if (checkIfBoxIsInRange(box, locationPlugin.getLastKnownLocation())) {
             Intent openBox = new Intent(this.getActivity(), OpenBoxActivity.class);
             Chest chest = getChest(box);
-            Toast.makeText(getContext(), "chest #" + chest.getId(), Toast.LENGTH_LONG).show();
             ApiUtils
                     .getService(UserService.class)
                     .openChest(getArguments().getString(Intent.EXTRA_USER), chest.getId())
@@ -248,10 +248,9 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
         double userLatitude = userLocation.getLatitude();
         double userLongitude = userLocation.getLongitude();
 
-        boolean checkedLongitude = Math.abs(boxLatitude - userLatitude) < MapConfig.range;
-        boolean checkedLatitude = Math.abs(boxLongitude - userLongitude) < MapConfig.range;
-
-        return checkedLatitude && checkedLongitude;
+        float[] result = new float[1];
+        Location.distanceBetween(boxLatitude,boxLongitude,userLatitude,userLongitude, result);
+        return result[0] < MapConfig.maxRangeFromBox;
     }
 
     private void handleHomeMarkerClick(Marker home) {

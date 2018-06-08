@@ -8,5 +8,5 @@ public interface MapConfig {
     int maxZoom = 19;
     int minZoom = 13;
     int defaultZoom = 16;
-    double range = 0.005; //TODO okreslic jakas sensowną minimalną odległość od skrzynki pozwalającą ją otworzyć
+    double maxRangeFromBox = 100; //in meters
 }
