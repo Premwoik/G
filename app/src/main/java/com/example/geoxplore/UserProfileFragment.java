@@ -163,7 +163,6 @@ public class UserProfileFragment extends Fragment {
             final Uri imageUri = data.getData();
             final InputStream imageStream = getContext().getContentResolver().openInputStream(imageUri);
             final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-            mUserImage.setImageBitmap(selectedImage);
 
 
             f.createNewFile();
@@ -182,19 +181,27 @@ public class UserProfileFragment extends Fragment {
             fos.flush();
             fos.close();
 
-            MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", f.getName(), RequestBody.create(MediaType.parse("image/*"), f));
+            int file_size = Integer.parseInt(String.valueOf(f.length()/1024));
+            if(file_size<5){
+                MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", f.getName(), RequestBody.create(MediaType.parse("image/*"), f));
 
-            ApiUtils.getService(UserService.class)
-                    .setAvatar(getArguments().getString(Intent.EXTRA_USER), filePart)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(voidResponse -> {
-                        if (voidResponse.isSuccessful()) {
-                            Toast.makeText(getContext(), "Good", Toast.LENGTH_LONG).show();
-                        } else {
-                            Toast.makeText(getContext(), String.valueOf(voidResponse.code()+voidResponse.message()), Toast.LENGTH_LONG).show();
-                        }
-                    });
+                ApiUtils.getService(UserService.class)
+                        .setAvatar(getArguments().getString(Intent.EXTRA_USER), filePart)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(voidResponse -> {
+                            if (voidResponse.isSuccessful()) {
+                                Toast.makeText(getContext(), "Good", Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(getContext(), String.valueOf(voidResponse.code()+voidResponse.message()), Toast.LENGTH_LONG).show();
+                            }
+                        });
+
+                mUserImage.setImageBitmap(selectedImage);
+            }else{
+                Toast.makeText(getContext(), "Size must be beneath 5kb", Toast.LENGTH_LONG).show();
+            }
+
 
 
         } catch (FileNotFoundException e) {
