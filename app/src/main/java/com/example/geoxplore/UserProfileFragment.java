@@ -80,6 +80,9 @@ public class UserProfileFragment extends Fragment {
     TextView mUserBox3;
     @BindView(R.id.user_profile_box4)
     TextView mUserBox4;
+    @BindView(R.id.user_profile_title)
+    TextView mUserTitle;
+
 
     Typeface mainFont;
 
@@ -131,6 +134,8 @@ public class UserProfileFragment extends Fragment {
                         mUserBox2.setText("x" + userStatistics.getChestStats().getOpenedOverallRareChests());
                         mUserBox3.setText("x" + userStatistics.getChestStats().getOpenedOverallEpicChests());
                         mUserBox4.setText("x" + userStatistics.getChestStats().getOpenedOverallLegendaryChests());
+                        mUserTitle.setText(getTitle(userStatistics.getLevel()));
+
 
                         SavedData.saveUserLevel(getContext(), userStatistics.getLevel());
                     }
@@ -163,6 +168,19 @@ public class UserProfileFragment extends Fragment {
                 });
     }
 
+
+    private String getTitle(int level){
+        if (level > 100)
+            return "Grandmaster";
+        else if (level > 60)
+            return "Master";
+        else if (level > 30)
+            return "Advanced";
+        else if (level > 10)
+            return "Intermediate";
+        else
+            return "Beginner";
+    }
 
     @Override
     public void onActivityResult(int reqCode, int resultCode, Intent data) {
@@ -242,6 +260,7 @@ public class UserProfileFragment extends Fragment {
         mUserBox2.setTypeface(mainFont);
         mUserBox3.setTypeface(mainFont);
         mUserBox4.setTypeface(mainFont);
+        mUserTitle.setTypeface(mainFont);
 
         mBadgesText.setText("0");
 

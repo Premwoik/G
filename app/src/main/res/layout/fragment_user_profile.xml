@@ -58,7 +58,14 @@
                 android:textColor="@color/fonts_white"
                 android:textSize="30sp" />
         </RelativeLayout>
-
+        <TextView
+            android:id="@+id/user_profile_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/fonts_white"
+            android:padding="10dp"
+            android:textSize="20sp"
+            android:gravity="center"/>
         <android.support.v7.widget.GridLayout xmlns:grid="http://schemas.android.com/apk/res-auto"
             android:id="@+id/choice_grid"
             android:layout_width="fill_parent"
@@ -138,6 +145,8 @@
 
         </android.support.v7.widget.GridLayout>
 
+
+
         <ProgressBar
             android:id="@+id/user_profile_exp_progress_bar"
             style="?android:attr/progressBarStyleHorizontal"
@@ -187,7 +196,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:padding="4dp"
+            android:padding="5dp"
             grid:columnCount="4"
             grid:rowCount="4">
 
@@ -228,28 +237,29 @@
                 grid:layout_gravity="center" />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 grid:layout_columnWeight="1"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@drawable/box" />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 grid:layout_columnWeight="1"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@drawable/box_blue" />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 grid:layout_columnWeight="1"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@drawable/box_gold" />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 grid:layout_columnWeight="1"
-                android:src="@mipmap/ic_launcher" />
+                android:layout_marginBottom="20dp"
+                android:src="@drawable/box_pink" />
 
         </android.support.v7.widget.GridLayout>
 
