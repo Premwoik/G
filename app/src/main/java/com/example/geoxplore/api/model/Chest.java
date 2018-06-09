@@ -11,9 +11,9 @@ public class Chest {
     private double longitude;
     private double latitude;
     private boolean opened;
-    private long value;
+    private int value;
 
-    public Chest(double longitude, double latitude, boolean opened, long value) {
+    public Chest(double longitude, double latitude, boolean opened, int value) {
         this.longitude = longitude;
         this.latitude = latitude;
         this.opened = opened;
@@ -56,7 +56,7 @@ public class Chest {
         this.opened = opened;
     }
 
-    public long getValue() {return value;}
+    public int getValue() {return value;}
 
-    public void setValue(long value) {this.value = value;}
+    public void setValue(int value) {this.value = value;}
 }
