@@ -13,3 +13,12 @@ GeoXplore jest grą zaliczaną do kategorii gier miejskich, które polegają na
 <img src="https://github.com/Premwoik/GeoXplore-Android/blob/develop/images/ranking.png" width="150"/>
 <img src="https://github.com/Premwoik/GeoXplore-Android/blob/develop/images/register.png" width="150"/>
   </p>
+
+## Description
+<p>
+Aby zagrać, użytkowanik musi założyć konto.
+<img src="https://github.com/Premwoik/GeoXplore-Android/blob/develop/images/register.png" width="150"/>
+login - musi być unikatowy i składać się z co najmniej czterech znaków
+hasło - dowolne
+e-mail - musi mieć postać example1@example2.example3
+</p>  
