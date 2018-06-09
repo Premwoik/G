@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity
                     return null;
                 })
                 .subscribe(bodyResponse -> {
-                    Toast.makeText(getApplicationContext(), String.valueOf(bodyResponse.code()), Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getApplicationContext(), String.valueOf(bodyResponse.code()), Toast.LENGTH_LONG).show();
                     if(bodyResponse.isSuccessful()){
                         if(bodyResponse.body()!=null){
 

@@ -36,6 +36,7 @@ public class MyRankingRecyclerViewAdapter extends RecyclerView.Adapter<MyRanking
 
     public MyRankingRecyclerViewAdapter(List<UserStatsRanking> items, String user) {
         usersStats = items;
+        items.add(0, new UserStatsRanking("s",0,0,0));
         this.user = user;
     }
 
@@ -53,11 +54,25 @@ public class MyRankingRecyclerViewAdapter extends RecyclerView.Adapter<MyRanking
         int openedChests = userStatsRanking.getOpenedChests();
         int level = userStatsRanking.getLevel();
 
-        holder.mRank.setText(String.valueOf(position+1));
-        holder.mName.setText(username);
-        holder.mLevel.setText(String.valueOf(level));
-        holder.mOpenedChest.setText(String.valueOf(openedChests));
-        holder.setReward(position);
+        if(position>0){
+            holder.mRank.setText(String.valueOf(position));
+            holder.mName.setText(username);
+            holder.mLevel.setText(String.valueOf(level));
+            holder.mOpenedChest.setText(String.valueOf(openedChests));
+            holder.setReward(position-1);
+            holder.mAvatar.setVisibility(View.VISIBLE);
+            holder.mReward.setVisibility(View.VISIBLE);
+
+        }
+        else{
+            holder.mRank.setText("#");
+            holder.mName.setText("username");
+            holder.mLevel.setText("level");
+            holder.mOpenedChest.setText("opened");
+            holder.mReward.setVisibility(View.INVISIBLE);
+            holder.mAvatar.setVisibility(View.INVISIBLE);
+        }
+
 
         ApiUtils
                 .getService(UserService.class)
@@ -81,7 +96,7 @@ public class MyRankingRecyclerViewAdapter extends RecyclerView.Adapter<MyRanking
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "Clicked!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(v.getContext(), "Clicked!", Toast.LENGTH_SHORT).show();
 //                if (null != mListener) {
                 // Notify the active callbacks interface (the activity, if the
                 // fragment is attached to one) that an item has been selected.

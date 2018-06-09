@@ -29,17 +29,17 @@
         android:layout_height="30dp"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/tv_name"
-        android:gravity="center_vertical"/>
+        android:gravity="center_vertical" />
 
     <TextView
         android:id="@+id/tv_opened_chest"
-        android:layout_width="40dp"
+        android:layout_width="50dp"
         android:layout_height="30dp"
         android:layout_alignBaseline="@+id/tv_rank"
         android:layout_alignBottom="@+id/tv_rank"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/tv_level"
-        android:gravity="center_vertical"/>
+        android:gravity="center_vertical" />
 
     <View
         android:layout_width="match_parent"

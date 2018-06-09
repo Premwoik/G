@@ -154,7 +154,7 @@ public class UserProfileFragment extends Fragment {
                 })
                 .subscribe(bodyResponse -> {
 
-                    Toast.makeText(getContext(), String.valueOf(bodyResponse.code()), Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getContext(), String.valueOf(bodyResponse.code()), Toast.LENGTH_LONG).show();
                     if (bodyResponse.isSuccessful()) {
                         if (bodyResponse.body() != null) {
 
@@ -219,9 +219,9 @@ public class UserProfileFragment extends Fragment {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(voidResponse -> {
                             if (voidResponse.isSuccessful()) {
-                                Toast.makeText(getContext(), "Good", Toast.LENGTH_LONG).show();
+                                //Toast.makeText(getContext(), "Good", Toast.LENGTH_LONG).show();
                             } else {
-                                Toast.makeText(getContext(), String.valueOf(voidResponse.code() + voidResponse.message()), Toast.LENGTH_LONG).show();
+                                //Toast.makeText(getContext(), String.valueOf(voidResponse.code() + voidResponse.message()), Toast.LENGTH_LONG).show();
                             }
                         });
 

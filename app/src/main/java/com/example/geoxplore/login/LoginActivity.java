@@ -108,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
             }
             default: {
                 SavedData.saveLoggedUserCredentials(getApplicationContext(), credentials);
-//                Toast.makeText(getApplicationContext(), "Zalogowano!", Toast.LENGTH_LONG).show();
+//                //Toast.makeText(getApplicationContext(), "Zalogowano!", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 intent.putExtra(Intent.EXTRA_USER, token);
                 startActivity(intent);
