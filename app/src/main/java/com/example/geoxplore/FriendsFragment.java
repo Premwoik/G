@@ -18,13 +18,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.geoxplore.api.ApiUtils;
-import com.example.geoxplore.api.model.Friend;
 import com.example.geoxplore.api.service.UserService;
-import com.example.geoxplore.dummy.DummyContent;
-import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,10 +32,7 @@ import io.reactivex.schedulers.Schedulers;
 public class FriendsFragment extends Fragment {
 
     public static final String TAG = "friends";
-
-    // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
     private int mColumnCount = 1;
 
     private Unbinder unbinder;
@@ -47,10 +40,6 @@ public class FriendsFragment extends Fragment {
     @BindView(R.id.add_friend_name)
     EditText mNameFriendToAdd;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
 
     @OnClick(R.id.add_friend_btn)
     public void addFriendBtn(Button btn){
@@ -79,7 +68,6 @@ public class FriendsFragment extends Fragment {
     public FriendsFragment() {
     }
 
-    // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
     public static FriendsFragment newInstance(int columnCount) {
         FriendsFragment fragment = new FriendsFragment();
@@ -108,7 +96,6 @@ public class FriendsFragment extends Fragment {
         View view = mview.findViewById(R.id.friends_list);
 
 
-        // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;

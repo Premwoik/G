@@ -60,7 +60,6 @@ public class LoginActivity extends AppCompatActivity {
         mForgottenPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO przypominanie hasła (potrzebne API)
             }
         });
 

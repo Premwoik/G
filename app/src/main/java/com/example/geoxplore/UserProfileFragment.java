@@ -89,7 +89,6 @@ public class UserProfileFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
         unbinder = ButterKnife.bind(this, view);
 
@@ -153,8 +152,6 @@ public class UserProfileFragment extends Fragment {
                     return null;
                 })
                 .subscribe(bodyResponse -> {
-
-                    //Toast.makeText(getContext(), String.valueOf(bodyResponse.code()), Toast.LENGTH_LONG).show();
                     if (bodyResponse.isSuccessful()) {
                         if (bodyResponse.body() != null) {
 
@@ -193,17 +190,11 @@ public class UserProfileFragment extends Fragment {
             final InputStream imageStream = getContext().getContentResolver().openInputStream(imageUri);
             final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
 
-
             f.createNewFile();
-
-
-//Convert bitmap to byte array
-
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             selectedImage.compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
             byte[] bitmapdata = bos.toByteArray();
 
-//write the bytes in file
             FileOutputStream fos = new FileOutputStream(f);
             fos.write(bitmapdata);
             fos.flush();
@@ -219,9 +210,7 @@ public class UserProfileFragment extends Fragment {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(voidResponse -> {
                             if (voidResponse.isSuccessful()) {
-                                //Toast.makeText(getContext(), "Good", Toast.LENGTH_LONG).show();
                             } else {
-                                //Toast.makeText(getContext(), String.valueOf(voidResponse.code() + voidResponse.message()), Toast.LENGTH_LONG).show();
                             }
                         });
 

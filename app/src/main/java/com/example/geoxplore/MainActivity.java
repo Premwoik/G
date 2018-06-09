@@ -79,7 +79,6 @@ public class MainActivity extends AppCompatActivity
                     return null;
                 })
                 .subscribe(bodyResponse -> {
-                    //Toast.makeText(getApplicationContext(), String.valueOf(bodyResponse.code()), Toast.LENGTH_LONG).show();
                     if(bodyResponse.isSuccessful()){
                         if(bodyResponse.body()!=null){
 
@@ -98,10 +97,6 @@ public class MainActivity extends AppCompatActivity
         TextView navHeaderUsername = headerlayout.findViewById(R.id.nav_header_username);
         navHeaderUsername.setText("nick: " + SavedData.getLoggedUserCredentials(getApplicationContext()).getUsername());
 
-//        TextView navHeaderLvl = headerlayout.findViewById(R.id.nav_header_level);
-//        navHeaderLvl.setText("level: " + SavedData.getUserLevel(getApplicationContext()));
-
-        //set main fragment
         MapFragment fragment = new MapFragment();
         fragment.setArguments(fragmentBundle);
         loadFragment(fragment, MapFragment.TAG);
@@ -122,12 +117,7 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        // TODO dodac profil tez do menu?
-        // TODO ogarnac jakos lepiej ladowanie fragmentow i przekazywanie do nich tokena
-
         int id = item.getItemId();
-    //TODO dodac lepsze ikonki
         switch (id) {
             case R.id.nav_map:
                 fragmentBundle.putBoolean(MapFragment.RESET_HOME, false);
@@ -171,14 +161,11 @@ public class MainActivity extends AppCompatActivity
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void loadFragment(final Fragment fragment, final String tag) {
-//        if (Objects.equals(CURRENT_TAG, tag)) return;
 
         Runnable pendingRunnable = () -> {
-            // update the main content by replacing fragments
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
                     android.R.anim.fade_out);
-//                fragmentTransaction.addToBackStack(tag);
             fragmentTransaction.replace(R.id.frame, fragment, tag);
             fragmentTransaction.commit();
         };

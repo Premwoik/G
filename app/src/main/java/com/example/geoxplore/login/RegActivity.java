@@ -62,7 +62,6 @@ public class RegActivity extends AppCompatActivity {
         mPassword.addTextChangedListener(new TextValidator(mPassword) {
             @Override
             public void validate(EditText editText, String text) {
-                //TODO Póki co nie trzeba
                 pass = true;
             }
         });

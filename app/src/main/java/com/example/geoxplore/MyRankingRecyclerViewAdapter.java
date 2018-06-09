@@ -23,16 +23,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 
-///**
-// * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
-//// * specified {@link OnListFragmentInteractionListener}.
-// */
 public class MyRankingRecyclerViewAdapter extends RecyclerView.Adapter<MyRankingRecyclerViewAdapter.ViewHolder> {
 
-    //private final List<DummyContent.DummyItem> mValues;
     private List<UserStatsRanking> usersStats;
     private String user;
-//    private final OnListFragmentInteractionListener mListener;
 
     public MyRankingRecyclerViewAdapter(List<UserStatsRanking> items, String user) {
         usersStats = items;
@@ -96,12 +90,6 @@ public class MyRankingRecyclerViewAdapter extends RecyclerView.Adapter<MyRanking
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Toast.makeText(v.getContext(), "Clicked!", Toast.LENGTH_SHORT).show();
-//                if (null != mListener) {
-                // Notify the active callbacks interface (the activity, if the
-                // fragment is attached to one) that an item has been selected.
-//                    mListener.onListFragmentInteraction(holder.mItem);
-//                }
             }
         });
     }

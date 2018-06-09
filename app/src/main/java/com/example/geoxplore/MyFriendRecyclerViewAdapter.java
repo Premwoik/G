@@ -59,9 +59,7 @@ public class MyFriendRecyclerViewAdapter extends RecyclerView.Adapter<MyFriendRe
                     .getUserAvatar(token, getItem(position).getUsername())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .onErrorReturn(x->{
-                        return null;
-                    })
+                    .onErrorReturn(x-> null)
                     .subscribe(bodyResponse -> {
                         if(bodyResponse.isSuccessful()){
                             if(bodyResponse.body()!=null){
