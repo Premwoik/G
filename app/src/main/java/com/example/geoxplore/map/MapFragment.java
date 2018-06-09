@@ -112,7 +112,7 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
 
         Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.home2);
         Bitmap bm2 = BitmapFactory.decodeResource(getResources(), R.drawable.box2);
-        Bitmap bm3 = BitmapFactory.decodeResource(getResources(), R.drawable.small_open_box);
+        Bitmap bm3 = BitmapFactory.decodeResource(getResources(), R.drawable.normal_open_box);
         iconFactory = IconFactory.getInstance(this.getContext());
         icon_home = iconFactory.fromBitmap(bm);
         icon_box = iconFactory.fromBitmap(bm2);

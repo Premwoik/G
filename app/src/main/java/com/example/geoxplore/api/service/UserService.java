@@ -61,7 +61,7 @@ public interface UserService {
     @GET("/user/chests")
     Observable<List<Chest>> getChests(@Header("Authorization") String token);
 
-    @GET("/community/ranking")
+    @GET("/community/ranking?page=0&size=25&sort=experience,DESC")
     Observable<List<UserStatsRanking>> getRanking(@Header("Authorization") String token);
 
     @POST("/user/open-chest/{id}")
