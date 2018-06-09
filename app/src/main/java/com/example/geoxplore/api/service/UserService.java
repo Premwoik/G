@@ -1,7 +1,9 @@
 package com.example.geoxplore.api.service;
 
+import com.example.geoxplore.api.model.AddFriendResponse;
 import com.example.geoxplore.api.model.Avatar;
 import com.example.geoxplore.api.model.Chest;
+import com.example.geoxplore.api.model.Friend;
 import com.example.geoxplore.api.model.HomeCords;
 import com.example.geoxplore.api.model.OpenBoxResponseData;
 import com.example.geoxplore.api.model.SecurityToken;
@@ -64,6 +66,12 @@ public interface UserService {
 
     @POST("/user/open-chest/{id}")
     Observable<OpenBoxResponseData> openChest(@Header("Authorization") String token, @Path("id") long id);
+
+    @POST("/community/add-friend/{username}")
+    Observable<Response<AddFriendResponse>> addFriend(@Header("Authorization") String token, @Path("username") String username);
+
+    @GET("/community/get-friends")
+    Observable<List<Friend>> getFriends(@Header("Authorization") String token);
 
 
 

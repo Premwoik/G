@@ -107,4 +107,7 @@
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="rank">Rank</string>
     <string name="reset_home">Reset Home</string>
+    <string name="menu_friends">Friends</string>
+    <string name="add_friend">Add Friend</string>
+    <string name="insert_name">Insert name!</string>
 </resources>

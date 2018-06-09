@@ -5,15 +5,13 @@ package com.example.geoxplore.api.model;
  */
 
 public class ChestStats {
-    private int openedOverallChests;
     private int openedOverallCommonChests;
     private int openedOverallRareChests;
     private int openedOverallEpicChests;
     private int openedOverallLegendaryChests;
     private int openedLastWeekChests;
 
-    public ChestStats(int openedOverallChests, int openedOverallCommonChests, int openedOverallRareChests, int openedOverallEpicChests, int openedOverallLegendaryChests, int openedLastWeekChests) {
-        this.openedOverallChests = openedOverallChests;
+    public ChestStats(int openedOverallCommonChests, int openedOverallRareChests, int openedOverallEpicChests, int openedOverallLegendaryChests, int openedLastWeekChests) {
         this.openedOverallCommonChests = openedOverallCommonChests;
         this.openedOverallRareChests = openedOverallRareChests;
         this.openedOverallEpicChests = openedOverallEpicChests;
@@ -21,13 +19,6 @@ public class ChestStats {
         this.openedLastWeekChests = openedLastWeekChests;
     }
 
-    public int getOpenedOverallChests() {
-        return openedOverallChests;
-    }
-
-    public void setOpenedOverallChests(int openedOverallChests) {
-        this.openedOverallChests = openedOverallChests;
-    }
 
     public int getOpenedOverallCommonChests() {
         return openedOverallCommonChests;

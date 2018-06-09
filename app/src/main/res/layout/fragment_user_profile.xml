@@ -53,9 +53,10 @@
                 android:layout_marginEnd="41dp"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/pts_shape_circle"
-                android:paddingTop="10dp"
+                android:paddingTop="25dp"
                 android:textAlignment="center"
-                android:textColor="@color/fonts_white" />
+                android:textColor="@color/fonts_white"
+                android:textSize="30sp" />
         </RelativeLayout>
 
         <android.support.v7.widget.GridLayout xmlns:grid="http://schemas.android.com/apk/res-auto"
@@ -181,42 +182,76 @@
             android:text="@string/gained"
             android:textColor="@color/fonts_white" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <android.support.v7.widget.GridLayout xmlns:grid="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/boxes_all_grid"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:padding="4dp"
+            grid:columnCount="4"
+            grid:rowCount="4">
 
-            <ProgressBar
-                android:id="@+id/user_profile_progress_bar1"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_margin="@dimen/default_gap"
-                android:background="@drawable/circle_shape"
-                android:indeterminate="false"
-                android:progressDrawable="@drawable/circular" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/user_profile_box1"
+                android:textColor="@color/fonts_white"
+                android:textSize="16sp"
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="center" />
 
-            <ProgressBar
-                android:id="@+id/user_profile_progress_bar2"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_margin="@dimen/default_gap"
-                android:background="@drawable/circle_shape"
-                android:indeterminate="false"
-                android:progressDrawable="@drawable/circular" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/user_profile_box2"
+                android:textColor="@color/fonts_white"
+                android:textSize="16sp"
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="center" />
 
-            <ProgressBar
-                android:id="@+id/user_profile_progress_bar3"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_margin="@dimen/default_gap"
-                android:background="@drawable/circle_shape"
-                android:indeterminate="false"
-                android:progressDrawable="@drawable/circular" />
-        </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/user_profile_box3"
+                android:textColor="@color/fonts_white"
+                android:textSize="16sp"
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="center" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/user_profile_box4"
+                android:textColor="@color/fonts_white"
+                android:textSize="16sp"
+                grid:layout_columnWeight="1"
+                grid:layout_gravity="center" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                grid:layout_columnWeight="1"
+                android:src="@mipmap/ic_launcher" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                grid:layout_columnWeight="1"
+                android:src="@mipmap/ic_launcher" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                grid:layout_columnWeight="1"
+                android:src="@mipmap/ic_launcher" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                grid:layout_columnWeight="1"
+                android:src="@mipmap/ic_launcher" />
+
+        </android.support.v7.widget.GridLayout>
 
 
         <!--</LinearLayout>-->

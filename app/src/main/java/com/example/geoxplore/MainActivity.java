@@ -155,6 +155,11 @@ public class MainActivity extends AppCompatActivity
                 fragment.setArguments(fragmentBundle);
                 loadFragment(fragment, MapFragment.TAG);
                 break;
+            case R.id.nav_friends:
+                FriendsFragment friendsFragment = new FriendsFragment();
+                friendsFragment.setArguments(fragmentBundle);
+                loadFragment(friendsFragment, FriendsFragment.TAG);
+                break;
             default:
                 Toast.makeText(getApplicationContext(), "No action yet! " + id, Toast.LENGTH_SHORT).show();
         }

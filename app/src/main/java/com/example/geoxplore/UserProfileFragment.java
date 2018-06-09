@@ -50,7 +50,6 @@ import retrofit2.Response;
 
 import static android.app.Activity.RESULT_OK;
 
-//TODO no zrobic, zeby jakos ladniej wygladało TJ usunąć niedziałające pola
 public class UserProfileFragment extends Fragment {
     public static final String TAG = "user_profile_fragment";
     private Unbinder unbinder;
@@ -69,16 +68,20 @@ public class UserProfileFragment extends Fragment {
     TextView mUserLvlText;
     @BindView(R.id.user_profile_percent_to_next_lvl)
     TextView mUserPercentToNextLvlText;
-    @BindView(R.id.user_profile_progress_bar3)
-    ProgressBar mProgress3;
-    @BindView(R.id.user_profile_progress_bar2)
-    ProgressBar mProgress2;
-    @BindView(R.id.user_profile_progress_bar1)
-    ProgressBar mProgress1;
     @BindView(R.id.user_profile_image)
     ImageView mUserImage;
     @BindView(R.id.user_profile_pts)
     TextView mUserPtsText;
+    @BindView(R.id.user_profile_box1)
+    TextView mUserBox1;
+    @BindView(R.id.user_profile_box2)
+    TextView mUserBox2;
+    @BindView(R.id.user_profile_box3)
+    TextView mUserBox3;
+    @BindView(R.id.user_profile_box4)
+    TextView mUserBox4;
+
+    Typeface mainFont;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -95,6 +98,8 @@ public class UserProfileFragment extends Fragment {
                 startActivityForResult(photoPickerIntent, 1);
             }
         });
+
+        mainFont = Typeface.createFromAsset(getActivity().getAssets(), "main.ttf");
         return view;
     }
 
@@ -107,21 +112,29 @@ public class UserProfileFragment extends Fragment {
     }
 
     @SuppressLint("SetTextI18n")
-    private void loadData(){
+    private void loadData() {
         ApiUtils.getService(UserService.class)
                 .getUserStats(getArguments().getString(Intent.EXTRA_USER))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-//                .onErrorReturn(x-> new UserStatistics("error",0,0,0,0))
+                .onErrorReturn(x -> null)
                 .subscribe(userStatistics -> {
-                    mExpProgressBar.setProgress(100 - (int) userStatistics.getToNextLevel());
-                    mUserLvlText.setText("level " + userStatistics.getLevel());
-                    mBoxesText.setText(String.valueOf(userStatistics.getChestStats().getOpenedOverallChests()));
-                    mUserNameText.setText(userStatistics.getUsername());
-                    mUserPercentToNextLvlText.setText((int) userStatistics.getToNextLevel() + "% to next");
-                    SavedData.saveUserLevel(getContext(), userStatistics.getLevel());
-                });
+                    if (userStatistics != null) {
+                        mExpProgressBar.setProgress(100 - (int) userStatistics.getToNextLevel());
+                        mUserLvlText.setText("level " + userStatistics.getLevel());
+                        mBoxesText.setText(String.valueOf(userStatistics.getOpenedOverallChests()));
+                        mFriendsText.setText(String.valueOf(userStatistics.getFriends()));
+                        mUserNameText.setText(userStatistics.getUsername());
+                        mUserPercentToNextLvlText.setText((int) userStatistics.getToNextLevel() + "% to next");
+                        mUserPtsText.setText(String.valueOf(userStatistics.getExperience()));
+                        mUserBox1.setText("x" + userStatistics.getChestStats().getOpenedOverallCommonChests());
+                        mUserBox2.setText("x" + userStatistics.getChestStats().getOpenedOverallRareChests());
+                        mUserBox3.setText("x" + userStatistics.getChestStats().getOpenedOverallEpicChests());
+                        mUserBox4.setText("x" + userStatistics.getChestStats().getOpenedOverallLegendaryChests());
 
+                        SavedData.saveUserLevel(getContext(), userStatistics.getLevel());
+                    }
+                });
 
 
         ApiUtils
@@ -129,7 +142,7 @@ public class UserProfileFragment extends Fragment {
                 .getAvatar(getArguments().getString(Intent.EXTRA_USER))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .onErrorReturn(x->{
+                .onErrorReturn(x -> {
                     Toast.makeText(getContext(), x.getMessage(), Toast.LENGTH_LONG).show();
 
                     return null;
@@ -137,8 +150,8 @@ public class UserProfileFragment extends Fragment {
                 .subscribe(bodyResponse -> {
 
                     Toast.makeText(getContext(), String.valueOf(bodyResponse.code()), Toast.LENGTH_LONG).show();
-                    if(bodyResponse.isSuccessful()){
-                        if(bodyResponse.body()!=null){
+                    if (bodyResponse.isSuccessful()) {
+                        if (bodyResponse.body() != null) {
 
                             Bitmap bm = BitmapFactory.decodeStream(bodyResponse.body().byteStream());
                             mUserImage.setImageBitmap(bm);
@@ -147,11 +160,8 @@ public class UserProfileFragment extends Fragment {
                     }
 
 
-
                 });
     }
-
-
 
 
     @Override
@@ -169,7 +179,6 @@ public class UserProfileFragment extends Fragment {
             f.createNewFile();
 
 
-
 //Convert bitmap to byte array
 
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -182,8 +191,8 @@ public class UserProfileFragment extends Fragment {
             fos.flush();
             fos.close();
 
-            int file_size = Integer.parseInt(String.valueOf(f.length()/1024));
-            if(/*file_size<5*/true){
+            int file_size = Integer.parseInt(String.valueOf(f.length() / 1024));
+            if (/*file_size<5*/true) {
                 MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", f.getName(), RequestBody.create(MediaType.parse("image/*"), f));
 
                 ApiUtils.getService(UserService.class)
@@ -194,15 +203,14 @@ public class UserProfileFragment extends Fragment {
                             if (voidResponse.isSuccessful()) {
                                 Toast.makeText(getContext(), "Good", Toast.LENGTH_LONG).show();
                             } else {
-                                Toast.makeText(getContext(), String.valueOf(voidResponse.code()+voidResponse.message()), Toast.LENGTH_LONG).show();
+                                Toast.makeText(getContext(), String.valueOf(voidResponse.code() + voidResponse.message()), Toast.LENGTH_LONG).show();
                             }
                         });
 
                 mUserImage.setImageBitmap(selectedImage);
-            }else{
+            } else {
                 Toast.makeText(getContext(), "Size must be beneath 5kb", Toast.LENGTH_LONG).show();
             }
-
 
 
         } catch (FileNotFoundException e) {
@@ -212,31 +220,33 @@ public class UserProfileFragment extends Fragment {
             e.printStackTrace();
         }
         else {
-            Toast.makeText(getContext(), "You haven't picked Image",Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "You haven't picked Image", Toast.LENGTH_LONG).show();
         }
 
 
     }
 
 
-    private void initial(){
-        SpannableString ss1=  new SpannableString("38pts");
-        ss1.setSpan(new RelativeSizeSpan(3f), 0,2, 0); // set size
-        mUserPtsText.setText(ss1);
-        mFriendsText.setText("23");
-        mBadgesText.setText("12");
+    private void initial() {
         mUserImage.setImageResource(R.drawable.user);
         mExpProgressBar.setMax(100);
 
+        mUserNameText.setTypeface(mainFont);
+        mBadgesText.setTypeface(mainFont);
+        mFriendsText.setTypeface(mainFont);
+        mBoxesText.setTypeface(mainFont);
+        mUserLvlText.setTypeface(mainFont);
+        mUserPercentToNextLvlText.setTypeface(mainFont);
+        mUserPtsText.setTypeface(mainFont);
+        mUserBox1.setTypeface(mainFont);
+        mUserBox2.setTypeface(mainFont);
+        mUserBox3.setTypeface(mainFont);
+        mUserBox4.setTypeface(mainFont);
+
+        mBadgesText.setText("0");
+
         mUserPercentToNextLvlText.setTypeface(null, Typeface.BOLD);
         mUserLvlText.setTypeface(null, Typeface.BOLD);
-
-        mProgress1.setMax(100);
-        mProgress1.setProgress(30);
-        mProgress2.setMax(100);
-        mProgress2.setProgress(80);
-        mProgress3.setMax(100);
-        mProgress3.setProgress(60);
     }
 
 

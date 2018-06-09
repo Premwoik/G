@@ -117,7 +117,8 @@ public class RegActivity extends AppCompatActivity {
                 break;
             }
             case 200: {
-                Toast.makeText(getApplicationContext(), "Udało się założyć konto, zaloguj się :)", Toast.LENGTH_LONG).show();
+//                Toast.makeText(getApplicationContext(), "Udało się założyć konto, zaloguj się :)", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Success!", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(RegActivity.this, LoginActivity.class);
                 intent.putExtra(Intent.EXTRA_USER, mLogin.getText());
                 startActivity(intent);
@@ -128,7 +129,7 @@ public class RegActivity extends AppCompatActivity {
                 break;
             }
             default:
-                Toast.makeText(getApplicationContext(), "coś nie pykło", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Try again later", Toast.LENGTH_LONG).show();
         }
     }
 

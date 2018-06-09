@@ -4,20 +4,14 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
-import android.support.constraint.ConstraintLayout;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -28,7 +22,6 @@ import com.example.geoxplore.api.model.Chest;
 import com.example.geoxplore.api.model.HomeCords;
 import com.example.geoxplore.api.model.OpenBoxResponseData;
 import com.example.geoxplore.api.service.UserService;
-import com.mapbox.androidsdk.plugins.building.BuildingPlugin;
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
 import com.mapbox.mapboxsdk.annotations.Marker;
@@ -40,9 +33,6 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.SupportMapFragment;
 import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerMode;
 import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
-import com.mapbox.mapboxsdk.style.layers.CircleLayer;
-import com.mapbox.mapboxsdk.style.layers.FillLayer;
-import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.services.android.telemetry.location.LocationEngine;
 import com.mapbox.services.android.telemetry.location.LocationEngineListener;
 import com.mapbox.services.android.telemetry.location.LocationEnginePriority;
@@ -52,8 +42,6 @@ import com.mapbox.services.android.telemetry.permissions.PermissionsManager;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.xml.transform.Source;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -71,7 +59,7 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
     private LocationEngine locationEngine;
     private MapboxMap mapboxMap;
     private final String HOME_MARKER_TITLE = "My Home";
-    private LinearLayout textLayout;
+    private MapMessages messages;
 
     private IconFactory iconFactory;
     private Icon icon_home, icon_box, icon_open_box;
@@ -89,12 +77,12 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
         View view = super.onCreateView(inflater, container, savedInstanceState);
         mapView = (MapView) view;
         RelativeLayout v = new RelativeLayout(getContext());
-        textLayout = new LinearLayout(getContext());
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        v.setLayoutParams(params);
+        LinearLayout textLayout = new LinearLayout(getContext());
+        messages = new MapMessages(textLayout, getContext(), getResources(), getActivity().getAssets());
         v.addView(mapView);
         v.addView(textLayout);
-
-
-//        View view = inflater.inflate(R.layout.fragment_map, container, false);
         return v;
     }
 
@@ -109,8 +97,6 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
         super.onMapReady(mapboxMap);
         this.mapboxMap = mapboxMap;
 
-//        buildingPlugin = new BuildingPlugin(mapView, mapboxMap);
-//        buildingPlugin.setVisibility(true);
         enableLocationPlugin();
         setInitialParams();
         addHomeMarkerAndLoadBoxes();
@@ -161,7 +147,7 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
     }
 
     private void chooseNewUserHome() {
-        setHomeTextLayout();
+        messages.displaySetHomeMessage();
         mapboxMap.addOnMapClickListener(new MapboxMap.OnMapClickListener() {
             @Override
             public void onMapClick(@NonNull LatLng point) {
@@ -173,7 +159,7 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
                             if (voidResponse.code() == 200) {
                                 mapboxMap.removeOnMapClickListener(this);
                                 mapboxMap.addMarker(new MarkerOptions().setPosition(point).title(HOME_MARKER_TITLE).icon(icon_home));
-                                textLayout.removeAllViews();
+                                messages.clearMessages();
                                 loadBoxes();
                             } else {
                                 onMapClick(point);
@@ -184,19 +170,6 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
         });
     }
 
-    private void setHomeTextLayout() {
-        TextView b = new TextView(getContext());
-        b.setText("CLICK ON THE MAP TO SET HOME POSITION");
-        b.setTextSize(30);
-        b.setPadding(0, 20, 0, 20);
-        b.setGravity(Gravity.CENTER);
-        b.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        b.setLayoutParams(params);
-        textLayout.addView(b);
-    }
-
     private void loadBoxes() {
         ApiUtils
                 .getService(UserService.class)
@@ -204,7 +177,6 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(data -> {
-//                    Toast.makeText(getContext(), "Boxes loaded", Toast.LENGTH_SHORT).show();
                     chests = new ArrayList<>(data);
                     for(Chest box: data){
                         if (box.isOpened()) {
@@ -247,16 +219,15 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
                                 chest.setOpened(true);
                                 startActivity(openBox);
                             } else {
-                                Toast.makeText(getContext(), "Nie można otworzyć skrzynki", Toast.LENGTH_SHORT).show();
+                                messages.displayMessage("Box can't be opened now", 1000);
                             }
                         });
             }else {
-                Toast.makeText(getContext(), "You've already opened that chest!", Toast.LENGTH_LONG).show();
+                messages.displayBoxAlreadyOpenMessage();
             }
             return true;
         }
-//        Toast.makeText(getContext(), "You are too far from box.", Toast.LENGTH_SHORT).show();
-        Toast.makeText(getContext(), "Podejdź bliżej!", Toast.LENGTH_SHORT).show();
+        messages.displayTooFarFromBoxMessage();
         return false;
     }
 
@@ -267,7 +238,6 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
             if (c.getLang().getLatitude() == position.getLatitude() && c.getLang().getLongitude() == position.getLongitude()) {
                 return c;
             }
-//            Toast.makeText(getContext(), "skrzynia: " + c.getId() + c.getLang(), Toast.LENGTH_LONG).show();
         }
         return null;
     }
@@ -389,27 +359,4 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
         }
         super.onStop();
     }
-
-//    // Container Activity must implement this interface
-//    public interface OnResetHomeListener {
-//        public void resetHome(int position);
-//    }
-//
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof OnResetHomeListener) {
-//            mListener = (OnResetHomeListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-//
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
-
 }

@@ -102,13 +102,13 @@ public class LoginActivity extends AppCompatActivity {
     public void httpStatusService(final String token, final UserCredentials credentials) {
         switch (token) {
             case "ERROR": {
-//                Toast.makeText(getApplicationContext(), "Try again!", Toast.LENGTH_LONG).show();
-                Toast.makeText(getApplicationContext(), "Spróbuj ponownie później!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Try again later", Toast.LENGTH_LONG).show();
+//                Toast.makeText(getApplicationContext(), "Spróbuj ponownie później!", Toast.LENGTH_LONG).show();
                 break;
             }
             default: {
                 SavedData.saveLoggedUserCredentials(getApplicationContext(), credentials);
-                Toast.makeText(getApplicationContext(), "Zalogowano!", Toast.LENGTH_LONG).show();
+//                Toast.makeText(getApplicationContext(), "Zalogowano!", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 intent.putExtra(Intent.EXTRA_USER, token);
                 startActivity(intent);

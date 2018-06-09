@@ -126,7 +126,7 @@ public class OpenBoxActivity extends AppCompatActivity {
 
 
         // Set up the user interaction to manually show or hide the system UI.
-//        mContentView.setOnClickListener(new View.OnClickListener() {
+//        mName.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
 //                toggle();

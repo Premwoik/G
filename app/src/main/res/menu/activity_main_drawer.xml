@@ -13,6 +13,10 @@
             android:icon="@drawable/user"
             android:title="@string/menu_profile" />
         <item
+            android:id="@+id/nav_friends"
+            android:icon="@drawable/id_card"
+            android:title="@string/menu_friends" />
+        <item
             android:id="@+id/nav_ranking"
             android:icon="@drawable/id_card"
             android:title="@string/map_ranking" />
