@@ -64,7 +64,7 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
     public static final String TAG = "map_fragment";
     public static final String RESET_HOME = "reset_home";
 
-//    private BuildingPlugin buildingPlugin;
+    //    private BuildingPlugin buildingPlugin;
     private MapView mapView;
     private PermissionsManager permissionsManager;
     private LocationLayerPlugin locationPlugin;
@@ -184,11 +184,11 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
         });
     }
 
-    private void setHomeTextLayout(){
+    private void setHomeTextLayout() {
         TextView b = new TextView(getContext());
         b.setText("CLICK ON THE MAP TO SET HOME POSITION");
         b.setTextSize(30);
-        b.setPadding(0,20,0,20);
+        b.setPadding(0, 20, 0, 20);
         b.setGravity(Gravity.CENTER);
         b.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -197,7 +197,6 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
         textLayout.addView(b);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void loadBoxes() {
         ApiUtils
                 .getService(UserService.class)
@@ -207,14 +206,13 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
                 .subscribe(data -> {
 //                    Toast.makeText(getContext(), "Boxes loaded", Toast.LENGTH_SHORT).show();
                     chests = new ArrayList<>(data);
-                    data.stream()
-                            .forEach(box -> {
-                                if (box.isOpened()) {
-                                    mapboxMap.addMarker(new MarkerOptions().setPosition(box.getLang()).icon(icon_open_box));
-                                } else {
-                                    mapboxMap.addMarker(new MarkerOptions().setPosition(box.getLang()).icon(icon_box));
-                                }
-                            });
+                    for (Chest box : chests) {
+                        if (box.isOpened()) {
+                            mapboxMap.addMarker(new MarkerOptions().setPosition(box.getLang()).icon(icon_open_box));
+                        } else {
+                            mapboxMap.addMarker(new MarkerOptions().setPosition(box.getLang()).icon(icon_box));
+                        }
+                    }
                 });
     }
 
@@ -275,7 +273,7 @@ public class MapFragment extends SupportMapFragment implements LocationEngineLis
         double userLongitude = userLocation.getLongitude();
 
         float[] result = new float[1];
-        Location.distanceBetween(boxLatitude,boxLongitude,userLatitude,userLongitude, result);
+        Location.distanceBetween(boxLatitude, boxLongitude, userLatitude, userLongitude, result);
         return result[0] < MapConfig.maxRangeFromBox;
     }
 
